@@ -7,6 +7,33 @@
     font-size: 1em;
 }
 
+/*Start - Customer css*/
+.pt-40 {
+    padding-top: 40px !important;
+}
+
+.w-5 {
+    width: 5% !important;
+}
+
+.w-10 {
+    width: 10% !important;
+}
+
+.w-90 {
+    width: 90% !important;
+}
+
+.w-95 {
+    width: 95% !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+/*End - Customer css*/
+
 body {
     background: #f8f9fd;
 }
@@ -58,3 +85,94 @@ body {
     border: 1px solid #426EB4 !important;
     color: #fff !important;
 }
+
+.all-suggestions {
+    padding: 6px 0px;
+    border-bottom: 1px solid orange;
+    display: table;
+    color: #17a2b8;
+}
+
+a.text-info:hover {
+    color: #00d9ff !important;
+    text-decoration: none;
+}
+
+.chat-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    background-color: #FCDAD5;
+    margin: 0 auto;
+}
+
+.chat-icon i {
+    font-size: 50px;
+    color: #EE7C6B;
+    padding-top: 8px;
+}
+
+.reply-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    background-color: #C9E4D6;
+    margin: 0 auto;
+}
+
+.reply-icon i {
+    font-size: 50px;
+    color: #367517;
+}
+
+.attach-icon-chat {
+    width: 50px;
+    height: 50px;
+    border-radius: 3px;
+    background-color: #EE7C6B;
+    margin-right: 10px;
+}
+
+.attach-icon-chat i {
+    font-size: 25px;
+    color: #FFF;
+    transform: rotateZ(45deg);
+}
+
+.attach-file-chat {
+    width: 94%;
+    padding: 4px 10px;
+    background-color: #f5cac3;
+    border-radius: 3px;
+}
+
+.attach-icon-reply {
+    width: 50px;
+    height: 50px;
+    border-radius: 3px;
+    background-color: #367517;
+    margin-right: 10px;
+}
+
+.attach-icon-reply i {
+    font-size: 25px;
+    color: #FFF;
+    transform: rotateZ(45deg);
+}
+
+.attach-file-reply {
+    width: 94%;
+    padding: 4px 10px;
+    background-color: #C9E4D6;
+    border-radius: 3px;
+}
+/*input[type="file"]{*/
+/*    color: transparent;*/
+/*}*/
+/*label {*/
+/*    padding: 5px;*/
+/*    background: silver;*/
+/*}*/
+/*label > input[type=file] {*/
+/*    display: none;*/
+/*}*/

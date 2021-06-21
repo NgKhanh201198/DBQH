@@ -2,17 +2,30 @@ import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {LoginComponent} from './pages/login/login.component';
 import {HomeComponent} from './pages/home/home.component';
+import {DetailComponent} from './pages/detail/detail.component';
+import {RecommendationsComponent} from './pages/recommendations/recommendations.component';
 
 const routes: Routes = [
     {
-        path: 'login',
+        path: 'dang-nhap',
         component: LoginComponent
     },
     {
-        path: 'home',
+        path: 'trang-chu',
         component: HomeComponent
     },
-    {path: '**', redirectTo: 'home'}
+    {
+        path: 'chi-tiet',
+        component: DetailComponent
+    },
+    {
+        path: 'tiep-nhan-phan-anh',
+        component: RecommendationsComponent
+    },
+    {
+        path: '**',
+        redirectTo: 'trang-chu'
+    }
 ];
 
 @NgModule({
