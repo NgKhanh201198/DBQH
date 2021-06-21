@@ -1,1 +1,60 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap');
+
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1em;
+}
+
+body {
+    background: #f8f9fd;
+}
+
+.login-section {
+    padding: 7em 0px;
+}
+
+.login {
+    position: relative;
+    background: #fff;
+    border-radius: 10px;
+    -moz-box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24);
+    box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24);
+}
+
+.login-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    background-color: #205AA7;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+
+.login-icon i {
+    font-size: 50px;
+    color: white;
+}
+
+.login-input {
+    height: 50px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.05);
+    color: #000;
+    font-size: 16px;
+    box-shadow: none;
+    border: 1px solid transparent;
+    padding-left: 20px;
+    padding-right: 20px;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+    border-radius: .25rem;
+}
+
+.btn-login {
+    height: 45px;
+    background: #426EB4 !important;
+    border: 1px solid #426EB4 !important;
+    color: #fff !important;
+}
