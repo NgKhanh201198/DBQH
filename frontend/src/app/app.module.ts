@@ -3,20 +3,20 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {LoginComponent} from './pages/login/login.component';
+import {TrangchuComponent} from './pages/trangchu/trangchu.component';
+import {DangnhapComponent} from './pages/dangnhap/dangnhap.component';
+import {ChitietComponent} from './pages/chitiet/chitiet.component';
+import {TiepnhanphananhComponent} from './pages/tiepnhanphananh/tiepnhanphananh.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule} from '@angular/forms';
-import {HomeComponent} from './pages/home/home.component';
-import { DetailComponent } from './pages/detail/detail.component';
-import { RecommendationsComponent } from './pages/recommendations/recommendations.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        LoginComponent,
-        HomeComponent,
-        DetailComponent,
-        RecommendationsComponent
+        TrangchuComponent,
+        DangnhapComponent,
+        ChitietComponent,
+        TiepnhanphananhComponent
     ],
     imports: [
         BrowserModule,
