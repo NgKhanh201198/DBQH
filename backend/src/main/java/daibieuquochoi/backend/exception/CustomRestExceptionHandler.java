@@ -71,4 +71,10 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(),
                 exception.getBindingResult().getFieldError().getDefaultMessage(), request.getDescription(false)));
     }
+
+    @ExceptionHandler({ConstraintValidationException.class})
+    public ResponseEntity<?> invalidParamsExceptionHandler(ConstraintValidationException exception, WebRequest request){
+        return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(),
+                exception.getBindingResult().getFieldError().getDefaultMessage(), request.getDescription(false)));
+    }
 }

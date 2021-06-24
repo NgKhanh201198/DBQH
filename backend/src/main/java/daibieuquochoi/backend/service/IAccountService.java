@@ -8,22 +8,22 @@ import daibieuquochoi.backend.entity.AccountEntity;
 public interface IAccountService {
 
     // Create
-    public void create(AccountEntity accountEntity);
+    void create(AccountEntity accountEntity);
 
     // Read
-    public Optional<AccountEntity> findByAccountName(String accountName);
+    Optional<AccountEntity> findByAccountName(String accountName);
 
-    public List<AccountEntity> getAll();
+    List<AccountEntity> getAll();
 
-    public AccountEntity getById(long id);
+    AccountEntity getById(long id);
 
     // Update
-    public void updateByID(AccountEntity accountEntity);
+    void updateByID(AccountEntity accountEntity);
 
-    public void updateAvatar(long id, String avatar);
+    void updateAvatar(long id, String avatar);
 
     // Check
-    public boolean isExistsById(long id);
+    boolean isExistsById(long id);
 
-    public boolean isExistsByAccountName(String accountName);
+    boolean isExistsByAccountName(String accountName);
 }

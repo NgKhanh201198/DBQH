@@ -6,14 +6,23 @@
                     <div class="login-icon d-flex align-items-center justify-content-center">
                         <i class="bi bi-person-circle"></i>
                     </div>
-                    <form ngForm="formData" (ngSubmit)="onSubmit()">
+                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                         <div class="form-group">
-                            <input type="text" class="login-input" placeholder="Tài khoản" required="">
+                            <input formControlName="accountName" type="text" class="login-input"
+                                   placeholder="Tài khoản">
+                        </div>
+                        <div *ngIf="errorAcc" class="login-error"><i class="bi bi-exclamation-circle"></i> {{errorAcc}}
                         </div>
                         <div class="form-group">
-                            <input type="password" class="login-input" placeholder="Mật khẩu" required="">
+                            <input formControlName="password" type="password" class="login-input"
+                                   placeholder="Mật khẩu">
                         </div>
-                        <button class="btn btn-login btn-block">Đăng nhập</button>
+                        <div *ngIf="errorPass" class="login-error"><i class="bi bi-exclamation-circle"></i> {{errorPass}}
+                        </div>
+                        <div *ngIf="error" class="login-error"><i class="bi bi-exclamation-circle"></i> {{error}}</div>
+                        <button class="btn btn-login btn-block d-flex justify-content-center align-items-center">
+                            <span *ngIf="loading" class="spinner-border spinner-border-custom"></span> Đăng nhập
+                        </button>
                     </form>
                 </div>
             </div>

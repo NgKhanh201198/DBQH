@@ -16,8 +16,6 @@ public class BackendApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         uploadFileService.init();
-
-        System.out.println("data: " + new Date());
     }
 
     public static void main(String[] args) {

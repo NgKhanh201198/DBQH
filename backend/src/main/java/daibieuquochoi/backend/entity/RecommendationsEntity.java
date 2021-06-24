@@ -57,7 +57,7 @@ public class RecommendationsEntity extends BaseEntity {
 	@JoinColumn(name = "agencyid")
 	private AgencyEntity agency;
 
-	@OneToMany(mappedBy = "recommendation", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "recommendations", cascade = CascadeType.ALL)
 	private Set<FeedbackEntity> feedback = new HashSet<FeedbackEntity>();
 
 	public RecommendationsEntity() {

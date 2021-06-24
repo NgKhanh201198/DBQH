@@ -1,6 +1,7 @@
 package daibieuquochoi.backend.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class LoginDTO {
@@ -8,7 +9,6 @@ public class LoginDTO {
     private String accountName;
 
     @NotBlank(message = "{Password.NotBlank}")
-    @Size(min = 6, max = 20, message = "ko dc")
 //    @Size(min = 6, max = 20, message = "{Password.Size}")
     private String password;
 

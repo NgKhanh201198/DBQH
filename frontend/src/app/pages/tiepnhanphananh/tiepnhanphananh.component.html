@@ -1,178 +1,237 @@
 <section class="recommendation-section">
-    <div class="container">
-        <h2 class="mt-3 mb-4">Tiếp nhận phản ánh kiến nghị</h2>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    Đối tượng PAKN <span class="text-red">*</span>
-                </div>
-                <div class="col-md-6">
-                    <div class="d-flex justify-content-between">
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="optradio">Người dân
-                            </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="optradio">Doanh nghiệp
-                            </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="optradio">Tổ chức
-                            </label>
+    <div class="container pb-5" style="background-color: #fff3f3">
+        <h2 class="pt-3 pb-4">Tiếp nhận phản ánh kiến nghị</h2>
+
+        <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        Đối tượng PAKN <span class="text-red">*</span>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-between">
+                            <div class="form-check-inline" *ngFor="let item of listObject">
+                                <label class="form-check-label d-flex">
+                                    <input type="radio" class="form-check-input" formControlName="object"
+                                           value="{{item.value}}">{{item.name}}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="nguoi-dan">Người dân <span class="text-red">*</span></label>
-                </div>
-                <div class="col-md-9">
-                    <input type="text" class="form-control" id="nguoi-dan" placeholder="Nhập tên người dân">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Người dân <span class="text-red">*</span></label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" formControlName="fullname"
+                               placeholder="Nhập tên người dân">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="nguoi-dan">Địa chỉ <span class="text-red">*</span></label>
-                </div>
-                <div class="col-md-9">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <select class="search_select_box w-100" data-live-search="true">
-                                    <option selected disabled>Tỉnh/Thành phố</option>
-                                    <option>Hà nội</option>
-                                    <option>Đà nẵng</option>
-                                    <option>Hà nội</option>
-                                    <option>Đà nẵng</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <select class="search_select_box w-100" data-live-search="true">
-                                    <option selected disabled>Quận/Huyện</option>
-                                    <option>Hà nội</option>
-                                    <option>Đà nẵng</option>
-                                    <option>Hà nội</option>
-                                    <option>Đà nẵng</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <select class="search_select_box w-100" data-live-search="true">
-                                    <option selected disabled>Phường/Xã</option>
-                                    <option>Hà nội</option>
-                                    <option>Đà nẵng</option>
-                                    <option>Hà nội</option>
-                                    <option>Đà nẵng</option>
-                                </select>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Địa chỉ <span class="text-red">*</span></label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select [(ngModel)]="tinh" [ngModelOptions]="{standalone: true}"
+                                            class="search_select_box w-100" data-live-search="true">
+                                        <option class="d-none" selected disabled>Tỉnh/Thành phố</option>
+                                        <option value="Thành phố Hà nội">Hà nội</option>
+                                        <option value="Dn">Đà nẵng</option>
+                                        <option value="HP">Hai phong</option>
+                                        <option value="DN">Đac nong</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select [(ngModel)]="huyen" [ngModelOptions]="{standalone: true}"
+                                            class="search_select_box w-100" data-live-search="true">
+                                        <option class="d-none" selected disabled>Quận/Huyện</option>
+                                        <option value="Huyện thạch thất">Huyện 1</option>
+                                        <option value="h2">Huyện 2</option>
+                                        <option value="h3">Huyện 3</option>
+                                        <option value="h4">Huyện 4</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select [(ngModel)]="xa" [ngModelOptions]="{standalone: true}"
+                                            class="search_select_box w-100" data-live-search="true">
+                                        <option class="d-none" selected disabled>Phường/Xã</option>
+                                        <option value="Xã tân xã">Xã 1</option>
+                                        <option value="xa2">Xã 2</option>
+                                        <option value="xa3">Xã 3</option>
+                                        <option value="xa4">Xã 4</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
+                        <input [(ngModel)]="thon" [ngModelOptions]="{standalone: true}" type="text" class="form-control"
+                               placeholder="Nhập số nhà, thôn xóm,...">
                     </div>
-                    <input type="text" class="form-control" placeholder="Nhập số nhà, thôn xóm,...">
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="sdt">Số điện thoại <span class="text-red">*</span></label>
-                </div>
-                <div class="col-md-9">
-                    <input type="text" class="form-control" id="sdt" placeholder="Nhập số điện thoại">
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="email">Email</label>
-                </div>
-                <div class="col-md-9">
-                    <input type="email" class="form-control" id="email" placeholder="Nhập email">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Số điện thoại <span class="text-red">*</span></label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" formControlName="phonenumber"
+                               placeholder="Nhập số điện thoại">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label>PAKN về việc <span class="text-red">*</span></label>
-                </div>
-                <div class="col-md-9">
-                    <input type="text" class="form-control" placeholder="Nhập tiêu đề PAKN">
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label>Loại ý kiến <span class="text-red">*</span></label>
-                </div>
-                <div class="col-md-9">
-                    <input type="text" class="form-control" placeholder="Nhập loại ý kiến">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Email</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="email" class="form-control" formControlName="email" placeholder="Nhập email">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label>Lĩnh vực <span class="text-red">*</span></label>
-                </div>
-                <div class="col-md-9">
-                    <input type="text" class="form-control" placeholder="Nhập lĩnh vực">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>PAKN về việc <span class="text-red">*</span></label>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" formControlName="title" placeholder="Nhập tiêu đề PAKN">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="noi-dung">Nội dung <span class="text-red">*</span></label>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Loại ý kiến <span class="text-red">*</span></label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group d-flex justify-content-between">
+                            <div class="form-check-inline" *ngFor="let item of listCommentType">
+                                <label class="form-check-label d-flex">
+                                    <input type="radio" class="form-check-input" formControlName="commenttype"
+                                           value="{{item.value}}" (ngModelChange)="hiddenCommentType()">{{item.name}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-between">
+                            <div class="form-check-inline w-25" style="height: 38px">
+                                <label class="form-check-label d-flex">
+                                    <input type="radio" class="form-check-input" formControlName="commenttype"
+                                           (ngModelChange)="resetCommentType()">Loại ý kiến khác
+                                </label>
+                            </div>
+                            <div class="w-100" *ngIf="showCommentType">
+                                <input type="text" class="form-control" [(ngModel)]="CommentType"
+                                       [ngModelOptions]="{standalone: true}"
+                                       (ngModelChange)="commentTypeChange($event)" placeholder="Nhập loại ý kiến khác">
+                            </div>
+                        </div>
+                        <hr class="mb-0">
+                    </div>
                 </div>
-                <div class="col-md-9">
-                    <textarea class="form-control" id="noi-dung" cols="30" rows="5"
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Lĩnh vực <span class="text-red">*</span></label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group d-flex justify-content-between">
+                            <div class="form-check-inline" *ngFor="let item of listFields">
+                                <label class="form-check-label d-flex">
+                                    <input type="radio" class="form-check-input" formControlName="fields"
+                                           value="{{item.value}}" (ngModelChange)="hiddenFields()">{{item.name}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-between">
+                            <div class="form-check-inline w-25" style="height: 38px">
+                                <label class="form-check-label d-flex">
+                                    <input type="radio" class="form-check-input" formControlName="fields"
+                                           (ngModelChange)="resetFields()">Lĩnh vực khác
+                                </label>
+                            </div>
+                            <div class="w-100" *ngIf="showFieldes">
+                                <input type="text" class="form-control" [(ngModel)]="Fields"
+                                       [ngModelOptions]="{standalone: true}" (ngModelChange)="fieldsChange($event)"
+                                       placeholder="Nhập lĩnh vực khác">
+                            </div>
+                            <hr class="mb-0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Nội dung <span class="text-red">*</span></label>
+                    </div>
+                    <div class="col-md-9">
+                    <textarea formControlName="contents" class="form-control" cols="30" rows="5"
                               placeholder="Nhập nội dung"></textarea>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="">Trạng thái</label>
-                </div>
-                <div class="col-md-9">
-                    <input type="text" class="form-control" placeholder="Nhập trạng thái">
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="dv-tiep-nhan">Chọn đơn vị tiếp nhận</label>
-                </div>
-                <div class="col-md-9">
-                    <select class="search_select_box w-100" data-live-search="true" id="dv-tiep-nhan">
-                        <option selected>Đăng nhập để chọn cơ quan tiếp nhận</option>
-                        <option value="1">Bộ công an</option>
-                        <option>Bộ giáo dục</option>
-                        <option>Bộ ngoại giao</option>
-                    </select>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Trạng thái</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input formControlName="status" type="text" class="form-control" placeholder="Nhập trạng thái">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    Tài liệu đính kèm
-                </div>
-                <div class="col-md-9">
-                    <input type="file" name="app_cvupload" class="fullwidth input rqd">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Thời hạn báo cáo</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div *ngIf="ngay" style="position: absolute; top: 7px;right: 50px">ngày</div>
+                        <input formControlName="reportingdeadline" (ngModelChange)="reportingdeadlineChange($event)"
+                               type="number" class="form-control" min="1" max="15" placeholder="Nhập số ngày">
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Chọn đơn vị tiếp nhận</label>
+                    </div>
+                    <div class="col-md-9">
+                        <select formControlName="agency" class="search_select_box w-100" data-live-search="true">
+                            <option value="" selected disabled>Đăng nhập để chọn cơ quan tiếp nhận</option>
+                            <option value="1">Bộ công an</option>
+                            <option value="2">Bộ giáo dục</option>
+                            <option value="3">Bộ ngoại giao</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        Tài liệu đính kèm
+                    </div>
+                    <div class="col-md-9">
+                        <label class="custom-file-upload">
+                            <input id="file" type="file" (change)="onSelectFile($event)">
+                            <div class="btn btn-outline-naucam">Chọn file</div>
+                            {{imgURL}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-block btn-primary"> Thêm mới</button>
+        </form>
     </div>
 </section>

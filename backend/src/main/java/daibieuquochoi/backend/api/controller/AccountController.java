@@ -27,6 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import daibieuquochoi.backend.response.ResponseMessage;
@@ -34,10 +35,12 @@ import daibieuquochoi.backend.service.Impl.AccountServiceImpl;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
+@Validated
 public class AccountController {
     @Value("${system.baseUrl}")
     private String BASE_URL;
@@ -119,7 +122,7 @@ public class AccountController {
     @PostMapping(path = "/account")
     public ResponseEntity<?> create(
             @RequestParam(value = "avatar") MultipartFile avatar,
-            @RequestParam(value = "accountName") String accountName,
+            @RequestParam(value = "accountName") @Min(value = 5,message = "dưới 5 rồi") String accountName,
             @RequestParam(value = "password") String password,
             @RequestParam(value = "fullname") String fullname,
             @RequestParam(value = "dateOfBirth") String dateOfBirth,
@@ -199,7 +202,7 @@ public class AccountController {
             return ResponseEntity.ok(new JwtResponse(userDetailsImpl.getId(), userDetailsImpl.getUsername(), userDetailsImpl.getFullname(), userDetailsImpl.getDateOfBirth(), userDetailsImpl.getAvatar(), userDetailsImpl.getPosition(), userDetailsImpl.getCandidateplace(), userDetailsImpl.getStatus(), role, userDetailsImpl.getAgency().getAgencyName(), jwtToken));
 
         } catch (BadCredentialsException ex) {
-            ResponseMessage message = new ResponseMessage(new Date(), HttpStatus.UNAUTHORIZED.value(), "Unauthorized", "Địa chỉ email hoặc mật khẩu của bạn không chính xác!");
+            ResponseMessage message = new ResponseMessage(new Date(), HttpStatus.UNAUTHORIZED.value(), "Unauthorized", "Tài khoản hoặc mật khẩu không chính xác!");
             return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
         } catch (DisabledException ex) {
             ResponseMessage message = new ResponseMessage(new Date(), HttpStatus.UNAUTHORIZED.value(), "Unauthorized", "Tài khoản của bạn chưa được kích hoạt!");
@@ -213,7 +216,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping(path = "account")
+    @GetMapping(path = "/account")
     public ResponseEntity<?> getAccountAll() {
         List<AccountEntity> listAccount = accountService.getAll();
         return new ResponseEntity<>(listAccount, HttpStatus.OK);

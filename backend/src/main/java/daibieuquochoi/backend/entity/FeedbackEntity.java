@@ -46,14 +46,14 @@ public class FeedbackEntity extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "recommendationsid")
-	private RecommendationsEntity recommendation;
+	private RecommendationsEntity recommendations;
 
 	public FeedbackEntity() {
 		super();
 	}
 
 	public FeedbackEntity(Long id, String title, String contents, String files, Date dateOfBirth, String avatar,
-			String position, String candidateplace, AccountEntity account, RecommendationsEntity recommendation) {
+			String position, String candidateplace, AccountEntity account, RecommendationsEntity recommendations) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -64,7 +64,7 @@ public class FeedbackEntity extends BaseEntity {
 		this.position = position;
 		this.candidateplace = candidateplace;
 		this.account = account;
-		this.recommendation = recommendation;
+		this.recommendations = recommendations;
 	}
 
 	public Long getId() {
@@ -140,11 +140,11 @@ public class FeedbackEntity extends BaseEntity {
 	}
 
 	public RecommendationsEntity getRecommendation() {
-		return recommendation;
+		return recommendations;
 	}
 
-	public void setRecommendation(RecommendationsEntity recommendation) {
-		this.recommendation = recommendation;
+	public void setRecommendation(RecommendationsEntity recommendations) {
+		this.recommendations = recommendations;
 	}
 
 }
