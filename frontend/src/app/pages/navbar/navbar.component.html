@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #17a2b8;">
+    <div class="navbar-brand pr-5 pl-5"></div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse pl-lg-5" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link menu" [routerLink]="['','trang-chu']" [routerLinkActive]="['active-nav']">Trang
+                    chủ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link menu" [routerLink]="['','tiep-nhan-phan-anh']" [routerLinkActive]="['active-nav']">Thêm
+                    phản ánh</a>
+            </li>
+        </ul>
+    </div>
+    <div class="nav ml-auto mr-5 position-relative" *ngIf="currentAccount">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle username text-white" href="" id="navbarDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span><i class="bi bi-person-check-fill menu-icon"></i> {{accountName}}</span>
+            </a>
+            <div class="dropdown-menu build-drop-menu" aria-labelledby="navbarDropdown">
+                <a *ngIf="isAdmin" class="dropdown-item d-flex align-items-center" [routerLink]="['','trang-quan-tri']">
+                    <i class="bi bi-person-circle menu-icon"></i>
+                    <span>Trang quản trị</span>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" [routerLink]="['','dang-nhap']"
+                   (click)="logout()">
+                    <i class="bi bi-power menu-icon"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </li>
+    </div>
+</nav>

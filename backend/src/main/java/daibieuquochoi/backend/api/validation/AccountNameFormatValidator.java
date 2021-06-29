@@ -10,6 +10,11 @@ public class AccountNameFormatValidator implements ConstraintValidator<AccountNa
 	public static final Pattern VALID_FULLNAME_ADDRESS_REGEX = Pattern.compile("^[a-zA-Z0-9_]$");
 
 	@Override
+	public void initialize(AccountNameFormat constraintAnnotation) {
+		ConstraintValidator.super.initialize(constraintAnnotation);
+	}
+
+	@Override
 	public boolean isValid(String fullname, ConstraintValidatorContext context) {
 		if (fullname == null || fullname.isEmpty()) {
 			return false;

@@ -24,8 +24,7 @@ export class AuthenticationService {
         this.currentAccount = this.currentAccountSubject.asObservable();
     }
 
-    // tslint:disable-next-line:typedef
-    handleError(error: HttpErrorResponse) {
+    handleError(error: HttpErrorResponse): Observable<never> {
         return throwError(error);
     }
 

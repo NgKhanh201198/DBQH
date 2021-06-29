@@ -1,10 +1,5 @@
 package daibieuquochoi.backend.api.controller;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import daibieuquochoi.backend.config.security.JwtTokenUtils;
 import daibieuquochoi.backend.dto.AccountDTO;
 import daibieuquochoi.backend.dto.LoginDTO;
@@ -13,6 +8,8 @@ import daibieuquochoi.backend.entity.AgencyEntity;
 import daibieuquochoi.backend.entity.RoleEntity;
 import daibieuquochoi.backend.exception.BadRequestException;
 import daibieuquochoi.backend.response.JwtResponse;
+import daibieuquochoi.backend.response.ResponseMessage;
+import daibieuquochoi.backend.service.Impl.AccountServiceImpl;
 import daibieuquochoi.backend.service.Impl.AgencyServiceImpl;
 import daibieuquochoi.backend.service.Impl.RoleServiceImpl;
 import daibieuquochoi.backend.service.UploadFileService;
@@ -29,13 +26,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import daibieuquochoi.backend.response.ResponseMessage;
-import daibieuquochoi.backend.service.Impl.AccountServiceImpl;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -66,75 +67,49 @@ public class AccountController {
     @Autowired
     public AuthenticationManager authenticationManager;
 
-/*    @PostMapping(path = "/account")
-    public ResponseEntity<?> register(@ModelAttribute @Valid LoginDTO registerDTO) {
-        try {
-            if (accountService.isExistsByAccountName(registerDTO.getAccountName())) {
-                return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(),
-                        HttpStatus.BAD_REQUEST.name(), "Tài khoản này đã được sử dụng!"));
-            }
-            CommonController controller = new CommonController();
-            AccountEntity accountEntity = new AccountEntity();
-
-//            Set Role
-            RoleEntity roleEntity = roleService.findByKeyName(registerDTO.getRole().toUpperCase())
-                    .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy quyền " + registerDTO.getRole().toUpperCase()));
-
-//            Set Agency
-            AgencyEntity agencyEntity = agencyService.findByAgencyName(registerDTO.getAgency())
-                    .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy cơ quan " + registerDTO.getAgency()));
-
-//            Set DateOfBirth
-            Date date = controller.stringToDate(registerDTO.getDateOfBirth());
-
-//             Set Avatar
-            String[] allowedMimeTypes = new String[]{"image/gif", "image/png", "image/jpeg"};
-
-            if (!ArrayUtils.contains(allowedMimeTypes, registerDTO.getAvatar().getContentType())) {
-                throw new BadRequestException("Tệp không hợp lệ, các tệp hợp lệ bao gồm: .jpg, .png, .gif");
-            }
-
-            String fileType = registerDTO.getAvatar().getOriginalFilename().substring(registerDTO.getAvatar().getOriginalFilename().length() - 4);
-            String uuidAvatar = "avatar-" + UUID.randomUUID().toString().replaceAll("-", "") + fileType.toLowerCase();
-            String urlAvatar = BASE_URL + "api/files/" + uuidAvatar;
-            uploadFileService.save(registerDTO.getAvatar(), uuidAvatar);
-
-            accountEntity.setAccountName(registerDTO.getAccountName());
-            accountEntity.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-            accountEntity.setFullname(registerDTO.getFullname());
-            accountEntity.setDateOfBirth(date);
-            accountEntity.setAvatar(urlAvatar);
-            accountEntity.setPosition(registerDTO.getPosition());
-            accountEntity.setCandidateplace(registerDTO.getCandidateplace());
-            accountEntity.setStatus(registerDTO.getStatus().toUpperCase());
-            accountEntity.setAgency(agencyEntity);
-            accountEntity.setRole(roleEntity);
-            accountService.create(accountEntity);
-
-            return ResponseEntity.ok(new ResponseMessage(new Date(), HttpStatus.OK.value(), "Bạn đã đăng ký thành công!"));
-        return new ResponseEntity<>(registerDTO, HttpStatus.OK);
-        } catch (DataAccessException ex) {
-            return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(),
-                    HttpStatus.BAD_REQUEST.name(), ex.getMessage()));
-        }
-    }*/
+//    @PostMapping(path = "/account")
+//    public ResponseEntity<?> register(@ModelAttribute @Valid LoginDTO registerDTO) {
+//
+//    }
 
     @PostMapping(path = "/account")
     public ResponseEntity<?> create(
-            @RequestParam(value = "avatar") MultipartFile avatar,
-            @RequestParam(value = "accountName") @Min(value = 5,message = "dưới 5 rồi") String accountName,
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "fullname") String fullname,
-            @RequestParam(value = "dateOfBirth") String dateOfBirth,
-            @RequestParam(value = "position") String position,
-            @RequestParam(value = "candidateplace") String candidateplace,
-            @RequestParam(value = "status") String status,
-            @RequestParam(value = "agency") String agency,
-            @RequestParam(value = "role") String role
+            @RequestParam(value = "avatar")
+                    MultipartFile avatar,
+            @RequestParam(value = "accountName")
+            @NotBlank(message = "{AccountName.NotBlank}")
+            @Pattern(regexp = "^[a-zA-Z0-9_]{3,50}$", message = "Tài khoản có ít nhất 3 đến 50 ký tự bao gồm chữ cái, số và dấu gạch dưới")
+                    String accountName,
+            @RequestParam(value = "password")
+            @NotBlank(message = "{Password.NotBlank}")
+            @Size(min = 6, max = 50, message = "{Password.Size}")
+                    String password,
+            @RequestParam(value = "fullname")
+            @NotBlank(message = "{Fullname.NotBlank}")
+            @Pattern(regexp = "^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]{0,50}$", message = "Họ và tên cho phép tối đa 50 ký tự chỉ bao gồm chữ cái")
+                    String fullname,
+            @RequestParam(value = "dateOfBirth")
+            @NotBlank(message = "{DateOfBirth.NotBlank}")
+                    String dateOfBirth,
+            @RequestParam(value = "position")
+            @NotBlank(message = "{Position.NotBlank}")
+                    String position,
+            @RequestParam(value = "candidateplace")
+            @NotBlank(message = "{Candidateplace.NotBlank}")
+                    String candidateplace,
+            @RequestParam(value = "status")
+            @NotBlank(message = "{Status.NotBlank}")
+                    String status,
+            @RequestParam(value = "agency")
+            @NotBlank(message = "{Agency.NotBlank}")
+                    String agency,
+            @RequestParam(value = "role")
+            @NotBlank(message = "{Role.NotBlank}")
+                    String role
     ) {
         try {
             if (accountService.isExistsByAccountName(accountName)) {
-                return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), "Tài khoản này đã được sử dụng!"));
+                return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), "Tên tài khoản '" + accountName + "' đã được sử dụng!"));
             }
             CommonController controller = new CommonController();
             AccountEntity accountEntity = new AccountEntity();
@@ -157,7 +132,7 @@ public class AccountController {
 
             String fileType = avatar.getOriginalFilename().substring(avatar.getOriginalFilename().length() - 4);
             String uuidAvatar = "avatar-" + UUID.randomUUID().toString().replaceAll("-", "") + fileType.toLowerCase();
-            String urlAvatar = BASE_URL + "api/files/" + uuidAvatar;
+            String urlAvatar = BASE_URL + "api/avatar/" + uuidAvatar;
             uploadFileService.save(avatar, uuidAvatar);
 
             accountEntity.setAccountName(accountName);
@@ -172,8 +147,8 @@ public class AccountController {
             accountEntity.setRole(roleEntity);
             accountService.create(accountEntity);
 
-            return ResponseEntity.ok(new ResponseMessage(new Date(), HttpStatus.OK.value(), "Bạn đã đăng ký thành công!"));
-        } catch (Exception ex) {
+            return ResponseEntity.ok(new ResponseMessage(new Date(), HttpStatus.OK.value(), "Thêm mới thành công!"));
+        } catch (ConstraintViolationException ex) {
             return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), ex.getMessage()));
         }
     }

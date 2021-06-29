@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import daibieuquochoi.backend.exception.BadRequestException;
 import daibieuquochoi.backend.exception.NotFoundException;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -19,10 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadFileService {
     private final Path root = Paths.get("uploads/");
 
-    public void save(MultipartFile file, String uuidImage) {
+    public void save(MultipartFile file, String fileName) {
         try {
-            Files.copy(file.getInputStream(), this.root.resolve(uuidImage));
-        } catch (Exception e) {
+            Files.copy(file.getInputStream(), this.root.resolve(fileName));
+        } catch (IOException e) {
             throw new RuntimeException("Không thể lưu trữ tệp. Error: " + e.getMessage());
         }
     }

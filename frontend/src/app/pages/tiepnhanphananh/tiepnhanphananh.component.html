@@ -1,8 +1,10 @@
+<header>
+    <app-navbar></app-navbar>
+</header>
 <section class="recommendation-section">
     <div class="container pb-5" style="background-color: #fff3f3">
         <h2 class="pt-3 pb-4">Tiếp nhận phản ánh kiến nghị</h2>
-
-        <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+        <form #myForm="ngForm" [formGroup]="formData" (ngSubmit)="onSubmit()">
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-3">
@@ -13,9 +15,12 @@
                             <div class="form-check-inline" *ngFor="let item of listObject">
                                 <label class="form-check-label d-flex">
                                     <input type="radio" class="form-check-input" formControlName="object"
-                                           value="{{item.value}}">{{item.name}}
+                                           value="{{item.value}}" (change)="selectObject()">{{item.name}}
                                 </label>
                             </div>
+                        </div>
+                        <div *ngIf="errorObject" class="login-error pb-0">
+                            <i class="bi bi-exclamation-circle"></i> Vui lòng chọn đối tượng!
                         </div>
                     </div>
                 </div>
@@ -27,7 +32,13 @@
                     </div>
                     <div class="col-md-9">
                         <input type="text" class="form-control" formControlName="fullname"
-                               placeholder="Nhập tên người dân">
+                               placeholder="Nhập tên người dân"
+                               [ngClass]="{ 'is-invalid': submitted && formValid.fullname.errors }">
+                        <div *ngIf="submitted && formValid.fullname.errors" class="invalid-feedback login-error pb-0">
+                            <div *ngIf="formValid.fullname.errors.required"><i class="bi bi-exclamation-circle"></i> Vui
+                                lòng nhập tên người dân!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -41,38 +52,50 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <select [(ngModel)]="tinh" [ngModelOptions]="{standalone: true}"
-                                            class="search_select_box w-100" data-live-search="true">
-                                        <option class="d-none" selected disabled>Tỉnh/Thành phố</option>
-                                        <option value="Thành phố Hà nội">Hà nội</option>
-                                        <option value="Dn">Đà nẵng</option>
-                                        <option value="HP">Hai phong</option>
-                                        <option value="DN">Đac nong</option>
+                                            class="form-control w-100" (change)="selectProvince(tinh)"
+                                            [ngClass]="{ 'is-invalid-select': submitted && errorTinh }">
+                                        <option class="d-none" disabled>Tỉnh/Thành phố</option>
+                                        <option *ngFor="let province of listProvince"
+                                                [ngValue]="province.value">{{province.name}}
+                                        </option>
                                     </select>
+                                    <div *ngIf="errorTinh" class="login-error pb-0">
+                                        <i class="bi bi-exclamation-circle"></i> Vui lòng chọn tỉnh/thành phố!
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <select [(ngModel)]="huyen" [ngModelOptions]="{standalone: true}"
-                                            class="search_select_box w-100" data-live-search="true">
-                                        <option class="d-none" selected disabled>Quận/Huyện</option>
-                                        <option value="Huyện thạch thất">Huyện 1</option>
-                                        <option value="h2">Huyện 2</option>
-                                        <option value="h3">Huyện 3</option>
-                                        <option value="h4">Huyện 4</option>
+                                            class="form-control w-100" (change)="selectDistrict(huyen)"
+                                            [ngClass]="{ 'is-invalid-select': submitted && errorHuyen }">
+                                        <option class="d-none" disabled>Quận/Huyện</option>
+                                        <option *ngFor="let district of listDistrict"
+                                                [ngValue]="district.value">{{district.name}}
+                                        </option>
                                     </select>
+                                    <div *ngIf="errorHuyen" class="login-error pb-0">
+                                        <i class="bi bi-exclamation-circle"></i> Vui lòng chọn quận/huyện!
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <select [(ngModel)]="xa" [ngModelOptions]="{standalone: true}"
-                                            class="search_select_box w-100" data-live-search="true">
+                                            class="form-control w-100" (change)="selectWard()"
+                                            [ngClass]="{ 'is-invalid-select': submitted && errorXa }">
                                         <option class="d-none" selected disabled>Phường/Xã</option>
-                                        <option value="Xã tân xã">Xã 1</option>
-                                        <option value="xa2">Xã 2</option>
-                                        <option value="xa3">Xã 3</option>
-                                        <option value="xa4">Xã 4</option>
+                                        <option *ngFor="let ward of listWard"
+                                                [value]="ward.value">{{ward.name}}
+                                        </option>
                                     </select>
+                                    <div *ngIf="errorXa" class="login-error pb-0">
+                                        <i class="bi bi-exclamation-circle"></i> Vui lòng chọn phường/xã!
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <input [(ngModel)]="thon" [ngModelOptions]="{standalone: true}" type="text" class="form-control"
-                               placeholder="Nhập số nhà, thôn xóm,...">
+                               placeholder="Nhập số nhà, thôn xóm,..." [ngClass]="{ 'is-invalid': submitted && !thon }">
+                        <div *ngIf="submitted && !thon" class="invalid-feedback login-error pb-0">
+                            <i class="bi bi-exclamation-circle"></i> Vui lòng nhập số nhà, thôn xóm!
+                        </div>
                     </div>
                 </div>
             </div>
@@ -83,7 +106,17 @@
                     </div>
                     <div class="col-md-9">
                         <input type="text" class="form-control" formControlName="phonenumber"
-                               placeholder="Nhập số điện thoại">
+                               placeholder="Nhập số điện thoại"
+                               [ngClass]="{ 'is-invalid': submitted && formValid.phonenumber.errors }">
+                        <div *ngIf="submitted && formValid.phonenumber.errors"
+                             class="invalid-feedback login-error pb-0">
+                            <div *ngIf="formValid.phonenumber.errors.required">
+                                <i class="bi bi-exclamation-circle"></i> Vui lòng nhập số điện thoại!
+                            </div>
+                            <div *ngIf="formValid.phonenumber && !formValid.phonenumber.errors.required">
+                                <i class="bi bi-exclamation-circle"></i> Vui lòng nhập số điện thoại hợp lệ!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,7 +126,16 @@
                         <label>Email</label>
                     </div>
                     <div class="col-md-9">
-                        <input type="email" class="form-control" formControlName="email" placeholder="Nhập email">
+                        <input type="email" class="form-control" formControlName="email" placeholder="Nhập email"
+                               [ngClass]="{ 'is-invalid': submitted && formValid.email.errors }">
+                        <div *ngIf="submitted && formValid.email.errors" class="invalid-feedback login-error pb-0">
+                            <div *ngIf="formValid.email.errors.required">
+                                <i class="bi bi-exclamation-circle"></i> Vui lòng nhập email!
+                            </div>
+                            <div *ngIf="formValid.email && !formValid.email.errors.required">
+                                <i class="bi bi-exclamation-circle"></i> Vui lòng nhập email hợp lệ!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -103,10 +145,17 @@
                         <label>PAKN về việc <span class="text-red">*</span></label>
                     </div>
                     <div class="col-md-9">
-                        <input type="text" class="form-control" formControlName="title" placeholder="Nhập tiêu đề PAKN">
+                        <input type="text" class="form-control" formControlName="title" placeholder="Nhập tiêu đề PAKN"
+                               [ngClass]="{ 'is-invalid': submitted && formValid.title.errors }">
+                        <div *ngIf="submitted && formValid.title.errors" class="invalid-feedback login-error pb-0">
+                            <div *ngIf="formValid.title.errors.required">
+                                <i class="bi bi-exclamation-circle"></i> Vui lòng nhập tiêu đề!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+<!--            &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-3">
@@ -125,7 +174,7 @@
                             <div class="form-check-inline w-25" style="height: 38px">
                                 <label class="form-check-label d-flex">
                                     <input type="radio" class="form-check-input" formControlName="commenttype"
-                                           (ngModelChange)="resetCommentType()">Loại ý kiến khác
+                                           (change)="resetCommentType()">Loại ý kiến khác
                                 </label>
                             </div>
                             <div class="w-100" *ngIf="showCommentType">
@@ -133,6 +182,12 @@
                                        [ngModelOptions]="{standalone: true}"
                                        (ngModelChange)="commentTypeChange($event)" placeholder="Nhập loại ý kiến khác">
                             </div>
+                        </div>
+                        <div *ngIf="errorCommenttype" class="login-error pb-0">
+                            <i class="bi bi-exclamation-circle"></i> Vui lòng chọn loại ý kiến!
+                        </div>
+                        <div *ngIf="errorCommenttypeOther" class="login-error pb-0">
+                            <i class="bi bi-exclamation-circle"></i> Vui lòng nhập ý kiến khác!
                         </div>
                         <hr class="mb-0">
                     </div>
@@ -156,7 +211,7 @@
                             <div class="form-check-inline w-25" style="height: 38px">
                                 <label class="form-check-label d-flex">
                                     <input type="radio" class="form-check-input" formControlName="fields"
-                                           (ngModelChange)="resetFields()">Lĩnh vực khác
+                                           (change)="resetFields()">Lĩnh vực khác
                                 </label>
                             </div>
                             <div class="w-100" *ngIf="showFieldes">
@@ -164,19 +219,31 @@
                                        [ngModelOptions]="{standalone: true}" (ngModelChange)="fieldsChange($event)"
                                        placeholder="Nhập lĩnh vực khác">
                             </div>
-                            <hr class="mb-0">
+                        </div>
+                        <div *ngIf="errorFields" class="login-error pb-0">
+                            <i class="bi bi-exclamation-circle"></i> Vui lòng chọn lĩnh vực!
+                        </div>
+                        <div *ngIf="errorFieldsOther" class="login-error pb-0">
+                            <i class="bi bi-exclamation-circle"></i> Vui lòng nhập lĩnh vực khác!
                         </div>
                     </div>
                 </div>
             </div>
+<!--            &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-3">
                         <label>Nội dung <span class="text-red">*</span></label>
                     </div>
                     <div class="col-md-9">
-                    <textarea formControlName="contents" class="form-control" cols="30" rows="5"
-                              placeholder="Nhập nội dung"></textarea>
+                        <textarea formControlName="contents" class="form-control" cols="30" rows="5"
+                                  placeholder="Nhập nội dung"
+                                  [ngClass]="{ 'is-invalid': submitted && formValid.contents.errors }"></textarea>
+                        <div *ngIf="submitted && formValid.contents.errors" class="invalid-feedback login-error pb-0">
+                            <div *ngIf="formValid.contents.errors.required">
+                                <i class="bi bi-exclamation-circle"></i> Vui lòng nhập nội dung!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -186,19 +253,32 @@
                         <label>Trạng thái</label>
                     </div>
                     <div class="col-md-9">
-                        <input formControlName="status" type="text" class="form-control" placeholder="Nhập trạng thái">
+                        <input formControlName="status" type="text" class="form-control" placeholder="Nhập trạng thái"
+                               [ngClass]="{ 'is-invalid': submitted && formValid.status.errors }">
+                        <div *ngIf="submitted && formValid.status.errors" class="invalid-feedback login-error pb-0">
+                            <div *ngIf="formValid.status.errors.required">
+                                <i class="bi bi-exclamation-circle"></i> Vui lòng nhập trạng thái!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-3">
-                        <label>Thời hạn báo cáo</label>
+                        <label>Thời hạn báo cáo <span class="text-red">*</span></label>
                     </div>
                     <div class="col-md-9">
                         <div *ngIf="ngay" style="position: absolute; top: 7px;right: 50px">ngày</div>
                         <input formControlName="reportingdeadline" (ngModelChange)="reportingdeadlineChange($event)"
-                               type="number" class="form-control" min="1" max="15" placeholder="Nhập số ngày">
+                               type="number" class="form-control" min="1" max="15" placeholder="Nhập số ngày"
+                               [ngClass]="{ 'is-invalid': submitted && formValid.reportingdeadline.errors }">
+                        <div *ngIf="submitted && formValid.reportingdeadline.errors"
+                             class="invalid-feedback login-error pb-0">
+                            <div *ngIf="formValid.reportingdeadline.errors.required">
+                                <i class="bi bi-exclamation-circle"></i> Vui lòng nhập thời hạn báo cáo!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -208,12 +288,14 @@
                         <label>Chọn đơn vị tiếp nhận</label>
                     </div>
                     <div class="col-md-9">
-                        <select formControlName="agency" class="search_select_box w-100" data-live-search="true">
-                            <option value="" selected disabled>Đăng nhập để chọn cơ quan tiếp nhận</option>
-                            <option value="1">Bộ công an</option>
-                            <option value="2">Bộ giáo dục</option>
-                            <option value="3">Bộ ngoại giao</option>
+                        <select formControlName="agency" class="form-control w-100" data-live-search="true"
+                                (change)="selectAgency()">
+                            <option class="d-none" disabled>Đăng nhập để chọn cơ quan tiếp nhận</option>
+                            <option *ngFor="let item of listAgency" [value]="item.value">{{item.name}}</option>
                         </select>
+                        <div *ngIf="errorAgency" class="login-error pb-0">
+                            <i class="bi bi-exclamation-circle"></i> Vui lòng chọn cơ quan!
+                        </div>
                     </div>
                 </div>
             </div>
@@ -228,6 +310,9 @@
                             <div class="btn btn-outline-naucam">Chọn file</div>
                             {{imgURL}}
                         </label>
+                        <div *ngIf="errorFiles" class="login-error pb-0">
+                            <i class="bi bi-exclamation-circle"></i> {{errorFiles}}
+                        </div>
                     </div>
                 </div>
             </div>

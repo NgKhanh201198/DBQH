@@ -26,13 +26,18 @@ public class LocationsServiceImpl implements ILocationsService {
     }
 
     @Override
-    public List<LocationsEntity> getDistrictByProvince(long parentid) {
+    public List<LocationsEntity> getDistrictByParentid(long parentid) {
         return locationsRepository.findAllByParentid(parentid);
     }
 
     @Override
-    public List<LocationsEntity> getWardByDistrict(long parentid) {
+    public List<LocationsEntity> getWardByParentid(long parentid) {
         return locationsRepository.findAllByParentid(parentid);
+    }
+
+    @Override
+    public boolean isLocationsExitByParentid(long parentid) {
+        return locationsRepository.existsByParentid(parentid);
     }
 
 

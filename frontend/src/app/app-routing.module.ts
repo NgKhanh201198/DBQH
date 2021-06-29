@@ -23,7 +23,7 @@ const routes: Routes = [
         path: 'chi-tiet',
         component: ChitietComponent,
         canActivate: [AuthenticationGuard],
-        data: {roles: [ERole.USER]}
+        data: {roles: [ERole.ADMIN, ERole.USER]}
     },
     {
         path: 'tiep-nhan-phan-anh',

@@ -63,11 +63,33 @@ public class UploadFileController {
         }
     }
 
-    @GetMapping("/files/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+    @GetMapping("/avatar/{filename:.+}")
+    public ResponseEntity<Resource> getAvatar(@PathVariable String filename) {
         Resource file = uploadFileService.load(filename);
         return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/jpeg"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "Content-Disposition: inlines").body(file);
+    }
+
+    @GetMapping("/avatar")
+    public ResponseEntity<List<FileRequest>> getListAvatars() {
+        List<FileRequest> FileRequest = uploadFileService.loadAll().map(file -> {
+            String filename = file.getFileName().toString();
+
+            String url = MvcUriComponentsBuilder
+                    .fromMethodName(UploadFileController.class, "getAvatar", file.getFileName().toString()).build()
+                    .toString();
+            return new FileRequest(filename, url);
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(FileRequest);
+    }
+
+    @GetMapping("/files/{filename:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        Resource file = uploadFileService.load(filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
     }
 
     @GetMapping("/files")

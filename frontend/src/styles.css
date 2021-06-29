@@ -35,7 +35,7 @@ html, body {
 }
 
 .text-red {
-    color: red;
+    color: red !important;
 }
 
 .pointer {
@@ -122,7 +122,7 @@ html, body {
 
 .login-error {
     color: red;
-    font-size: 14px;
+    font-size: 80%;
     padding-bottom: 1rem;
 }
 
@@ -255,20 +255,6 @@ input[type="file"] {
     display: none;
 }
 
-/*input#file {*/
-/*    display: inline-block;*/
-/*    width: 100%;*/
-/*    padding: 120px 0 0 0;*/
-/*    height: 100px;*/
-/*    overflow: hidden;*/
-/*    -webkit-box-sizing: border-box;*/
-/*    -moz-box-sizing: border-box;*/
-/*    box-sizing: border-box;*/
-/*    background: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698394-icon-130-cloud-upload-512.png') center center no-repeat #e4e4e4;*/
-/*    border-radius: 20px;*/
-/*    background-size: 60px 60px;*/
-/*}*/
-
 /* custom input radio */
 input[type="radio"] {
     /* create custom radiobutton appearance */
@@ -290,4 +276,105 @@ input[type="radio"]:checked {
     appearance: none;
     background-color: #d45c37;
     border: 1px solid #d45c37;
+}
+
+.form-control.is-invalid-select {
+    border-color: #dc3545;
+}
+
+a.active-nav {
+    border-bottom: 1px solid #fff;
+    padding: 8px 0px 0px 0px !important;
+    color: white !important;
+}
+
+.menu {
+    color: #e8e8e8 !important;
+    font-size: 1.25rem;
+    padding: 8px 0px 0px 0px !important;
+    margin: 10px 15px;
+}
+
+.dropdown-menu.show {
+    right: 15px;
+    left: auto;
+    padding: 2px 0px;
+    border: 1px solid #17a2b8;
+}
+
+.menu-icon {
+    font-size: 20px;
+    padding-right: 3px;
+}
+
+.img-custom {
+    width: auto;
+    max-height: 200px;
+    margin-left: 20px;
+}
+
+.thongbao {
+    position: fixed;
+    right: 50px;
+    top: 100px;
+    width: auto;
+    padding: 10px 25px;
+    background-color: #a8dca8;
+    border: 1px solid #32dc32;
+    border-radius: 3px;
+    z-index: 9999;
+    transition: 5s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.thongbao.show {
+    animation: active 3s forwards;
+}
+
+.thongbao i {
+    color: green;
+    font-size: 1.5em;
+}
+
+@keyframes active {
+    0% {
+        transform: translateX(350px);
+        opacity: 0;
+    }
+    30% {
+        transform: translateX(0px);
+        opacity: 1;
+        visibility: visible;
+    }
+    75% {
+        transform: translateX(0px);
+        opacity: 1;
+        visibility: visible;
+    }
+    100% {
+        transform: translateX(350px);
+    }
+}
+
+ul.ngx-pagination .pagination-previous a::before,
+ul.ngx-pagination .pagination-previous.disabled::before {
+    content: '◀' !important;
+}
+
+ul.ngx-pagination .pagination-next a::after,
+ul.ngx-pagination .pagination-next.disabled::after {
+    content: '▶' !important;
+}
+
+.status-active {
+    color: #008900;
+    padding: 10px 35px;
+    text-align: left;
+}
+
+.status-locked {
+    color: #ff2a2a;
+    padding: 10px 35px;
+    text-align: left;
 }

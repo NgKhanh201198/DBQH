@@ -1,9 +1,9 @@
 export class Options {
-    name: string;
-    value: string;
+    name: any;
+    value: any;
 
-    constructor(name: string, value: string) {
-        this.name = name;
+    constructor(value: any, name: any) {
         this.value = value;
+        this.name = name;
     }
 }

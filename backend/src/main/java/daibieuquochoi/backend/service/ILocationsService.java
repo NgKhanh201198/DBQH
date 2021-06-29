@@ -11,7 +11,10 @@ public interface ILocationsService {
 
     List<LocationsEntity> getProvinceAll();
 
-    List<LocationsEntity> getDistrictByProvince(long parentid);
+    List<LocationsEntity> getDistrictByParentid(long parentid);
 
-    List<LocationsEntity> getWardByDistrict(long parentid);
+    List<LocationsEntity> getWardByParentid(long parentid);
+
+    //Check
+    boolean isLocationsExitByParentid(long id);
 }

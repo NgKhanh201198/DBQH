@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import daibieuquochoi.backend.entity.AccountEntity;
@@ -27,7 +28,7 @@ public class AccountServiceImpl implements IAccountService {
 
     @Override
     public List<AccountEntity> getAll() {
-        return accountRepository.findAll();
+        return accountRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION.ASC, "id"));
     }
 
     @Override

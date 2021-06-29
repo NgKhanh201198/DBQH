@@ -12,7 +12,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/locations")
 public class LocationsController {
     @Autowired
     LocationsServiceImpl locationsService;
@@ -26,14 +26,14 @@ public class LocationsController {
     @GetMapping(path = "/district")
     public ResponseEntity<?> getDistrictByProvince(@RequestParam(value = "province") String province) {
         LocationsEntity locationsEntity = locationsService.findByName(province).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tỉnh: " + province));
-        List<LocationsEntity> listDistrict = locationsService.getDistrictByProvince(locationsEntity.getId());
+        List<LocationsEntity> listDistrict = locationsService.getDistrictByParentid(locationsEntity.getId());
         return new ResponseEntity<>(listDistrict, HttpStatus.OK);
     }
 
     @GetMapping(path = "/ward")
     public ResponseEntity<?> getWardByDistrict(@RequestParam(value = "district") String district) {
         LocationsEntity locationsEntity = locationsService.findByName(district).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tỉnh: " + district));
-        List<LocationsEntity> listWard = locationsService.getWardByDistrict(locationsEntity.getId());
+        List<LocationsEntity> listWard = locationsService.getWardByParentid(locationsEntity.getId());
         return new ResponseEntity<>(listWard, HttpStatus.OK);
     }
 }
