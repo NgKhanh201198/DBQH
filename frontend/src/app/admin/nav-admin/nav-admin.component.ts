@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../core/services/authentication.service';
 import {Router} from '@angular/router';
+import {Account} from '../../core/models/Account';
 
 @Component({
     selector: 'app-nav-admin',
@@ -8,6 +9,8 @@ import {Router} from '@angular/router';
     styleUrls: ['./nav-admin.component.css']
 })
 export class NavAdminComponent implements OnInit {
+    currentAccount: Account;
+    accountName: string = '';
 
     constructor(
         private auth: AuthenticationService,
@@ -16,6 +19,9 @@ export class NavAdminComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.currentAccount = this.auth.currentAccountValue;
+        this.accountName = this.currentAccount.accountName;
+        console.log(this.accountName);
     }
 
     logout(): void {

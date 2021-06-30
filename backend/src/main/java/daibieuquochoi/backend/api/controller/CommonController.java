@@ -3,6 +3,7 @@ package daibieuquochoi.backend.api.controller;
 import daibieuquochoi.backend.exception.BadRequestException;
 import daibieuquochoi.backend.service.UploadFileService;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +40,16 @@ public class CommonController {
 
     public Date stringToDate(String strDate) {
         Date date = null;
+
+//        String dateOfBirth = userCustomerDTO.getDateOfBirth();
+//        Date date;
+//        try {
+//            date = DateUtils.parseDate(dateOfBirth, new String[]{"yyyy-MM-dd", "dd-MM-yyyy"});
+//            userEntity.setDateOfBirth(date);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
         if (isDateValid(strDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
             formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -47,11 +58,17 @@ public class CommonController {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        } else {
+        } else if (isDateValid(strDate, "yyyy-MM-dd'T'HH:mm:ss'Z'")) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
             formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
             try {
                 date = formatter.parse(strDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                date = DateUtils.parseDate(strDate, new String[]{"yyyy-MM-dd", "dd-MM-yyyy"});
             } catch (ParseException e) {
                 e.printStackTrace();
             }

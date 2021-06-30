@@ -45,16 +45,12 @@ export class DangnhapComponent implements OnInit {
             this.authenticationService.login(this.loginForm.value.accountName, this.loginForm.value.password)
                 .subscribe({
                     next: () => {
-                        // this.router.navigate(['/trang-chu']);
                         this.router.navigate(['/tiep-nhan-phan-anh']);
                     },
                     error: (err: any) => {
                         setTimeout(() => {
-                            // if (this.error) {
                             this.loading = false;
-
-                            this.error = err;
-                            // }
+                            this.error = err.message;
                         }, 1000);
                     }
                 });

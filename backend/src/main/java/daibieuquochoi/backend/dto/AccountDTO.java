@@ -11,9 +11,9 @@ public class AccountDTO {
     @Size(min = 3, max = 50, message = "{AccountName.Size}")
     private String accountName;
 
-    @NotBlank(message = "{Password.NotBlank}")
-    @Size(min = 3, max = 50, message = "{Password.Size}")
-    private String password;
+//    @NotBlank(message = "{Password.NotBlank}")
+//    @Size(min = 6, max = 50, message = "{Password.Size}")
+//    private String password;
 
     @NotBlank(message = "{Fullname.NotBlank}")
     @Size(min = 2, max = 50, message = "{Fullname.Size}")
@@ -21,9 +21,6 @@ public class AccountDTO {
 
     @NotBlank(message = "{DateOfBirth.NotBlank}")
     private String dateOfBirth;
-
-    @NotBlank(message = "{Avatar.NotBlank}")
-    private String avatar;
 
     @NotBlank(message = "{Position.NotBlank}")
     private String position;
@@ -40,23 +37,6 @@ public class AccountDTO {
     @NotBlank(message = "{Role.NotBlank}")
     private String role;
 
-    public AccountDTO() {
-        super();
-    }
-
-    public AccountDTO(String accountName, String password, String fullname, String dateOfBirth, String avatar, String position, String candidateplace, String status, String agency, String role) {
-        this.accountName = accountName;
-        this.password = password;
-        this.fullname = fullname;
-        this.dateOfBirth = dateOfBirth;
-        this.avatar = avatar;
-        this.position = position;
-        this.candidateplace = candidateplace;
-        this.status = status;
-        this.agency = agency;
-        this.role = role;
-    }
-
     public String getAccountName() {
         return accountName;
     }
@@ -65,13 +45,13 @@ public class AccountDTO {
         this.accountName = accountName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
 
     public String getFullname() {
         return fullname;
@@ -87,14 +67,6 @@ public class AccountDTO {
 
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public String getPosition() {

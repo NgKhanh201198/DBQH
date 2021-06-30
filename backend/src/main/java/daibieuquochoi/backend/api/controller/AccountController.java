@@ -209,7 +209,7 @@ public class AccountController {
     }
 
     @PutMapping("/account/{id}")
-    public ResponseEntity<?> updateCustomer(@PathVariable("id") long id, @RequestBody @Valid AccountDTO accountDTO) {
+    public ResponseEntity<?> update(@PathVariable("id") long id, @RequestBody AccountDTO accountDTO) {
         try {
             if (!(accountService.isExistsById(id))) {
                 ResponseMessage message = new ResponseMessage(new Date(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.name(), "Không tìm thấy id = " + id);
@@ -231,13 +231,15 @@ public class AccountController {
                 CommonController commonController = new CommonController();
                 Date date = commonController.stringToDate(accountDTO.getDateOfBirth());
 
+                oldAccountEntity.setAccountName(accountDTO.getAccountName());
                 oldAccountEntity.setFullname(accountDTO.getFullname());
+//                oldAccountEntity.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
                 oldAccountEntity.setDateOfBirth(date);
                 oldAccountEntity.setPosition(accountDTO.getPosition());
                 oldAccountEntity.setCandidateplace(accountDTO.getCandidateplace());
                 oldAccountEntity.setStatus(accountDTO.getStatus());
-                oldAccountEntity.setRole(roleEntity);
                 oldAccountEntity.setAgency(agencyEntity);
+                oldAccountEntity.setRole(roleEntity);
 
                 accountService.updateByID(oldAccountEntity);
 
@@ -261,7 +263,7 @@ public class AccountController {
                 String[] allowedMimeTypes = new String[]{"image/gif", "image/png", "image/jpeg"};
 
                 if (!ArrayUtils.contains(allowedMimeTypes, avatar.getContentType())) {
-                    throw new BadRequestException("Tệp không hợp lệ, các tệp hợp lệ bao gồm: .jpg, .png, .gif");
+                    throw new BadRequestException("Tệp không hợp lệ, các tệp hợp lệ bao gồm: .jpg, .png");
                 }
                 String fileName = avatar.getOriginalFilename().substring(avatar.getOriginalFilename().length() - 4);
 

@@ -9,7 +9,6 @@ public class LoginDTO {
     private String accountName;
 
     @NotBlank(message = "{Password.NotBlank}")
-//    @Size(min = 6, max = 20, message = "{Password.Size}")
     private String password;
 
     public String getAccountName() {

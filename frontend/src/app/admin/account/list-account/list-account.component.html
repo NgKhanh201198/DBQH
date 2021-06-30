@@ -21,39 +21,41 @@
                             </tr>
                             </thead>
                             <tbody *ngFor="let item of listAccount| paginate: { itemsPerPage: 5, currentPage: page}">
+                            <!--                            <tbody *ngFor="let item of listAccount">-->
                             <tr class="text-center">
                                 <td>
-                                    <div class="avatar-custom" style="background-image: url('{{item.image}}');">
-                                    <!--                                        <img class="img-fluid" *ngIf="!item.avatar" src="assets/adminlte/dist/img/avatar5.png"-->
-                                    <!--                                             alt="Avatar">-->
-                                    <!--                                        <img class="img-fluid" *ngIf="item.avatar" src="{{item.avatar}}" alt="Avatar">-->
+                                    <div class="avatar-custom">
+                                        <img class="avatar-custom-fluid" *ngIf="!item.avatar"
+                                             src="assets/adminlte/dist/img/avatar5.png" alt="Avatar">
+                                        <img class="avatar-custom-fluid" *ngIf="item.avatar" src="{{item.avatar}}"
+                                             alt="Avatar">
+                                    </div>
+                                </td>
+                                <td>{{item.accountName}}</td>
+                                <td>{{item.fullname}}</td>
+                                <td>{{item.position}}</td>
+                                <td class="text-left">
+                                    <div class="status-active" *ngIf="item.status=='ACTIVE'"><i
+                                        class="bi bi-circle-fill"></i> Hoạt động
+                                    </div>
+                                    <div class="status-locked" *ngIf="item.status=='LOCKED'"><i
+                                        class="bi bi-circle-fill"></i> Bị Khóa
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <a [routerLink]="['/trang-quan-tri/danh-sach-tai-khoan','chinh-sua-thong-tin',item.id]"
+                                       class="btn-edit btn btn-outline-info"><i class="fas fa-pen "></i></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    </td>
-                    <td>{{item.accountName}}</td>
-                    <td>{{item.fullname}}</td>
-                    <td>{{item.position}}</td>
-                    <td class="text-left">
-                        <div class="status-active" *ngIf="item.status=='ACTIVE'"><i
-                            class="bi bi-circle-fill"></i> Hoạt động
-                        </div>
-                        <div class="status-locked" *ngIf="item.status=='LOCKED'"><i
-                            class="bi bi-circle-fill"></i> Bị Khóa
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <a [routerLink]="['/admin-page','updated-account',item.id]"
-                           class="btn-edit btn btn-outline-info"><i class="fas fa-pen "></i></a>
-                    </td>
-                    </tr>
-                    </tbody>
-                    </table>
-                </div>
-                <div class="card-footer pb-0">
-                    <pagination-controls class="text-center" (pageChange)="page = $event"
-                                         maxSize="5"></pagination-controls>
+                    <div class="card-footer pb-0">
+                        <pagination-controls class="text-center" (pageChange)="page = $event"
+                                             maxSize="5"></pagination-controls>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>

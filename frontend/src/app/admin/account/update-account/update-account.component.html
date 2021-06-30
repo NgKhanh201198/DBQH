@@ -1,1 +1,250 @@
-<p>update-account works!</p>
+<div class="wrapper">
+    <app-nav-admin></app-nav-admin>
+
+    <div class="content-wrapper h">
+        <div class="content pt-3">
+            <div class="container pb-5 px-5">
+                <div class="row justify-content-center align-items-center pb-5">
+                    <div class="col-sm-1 back">
+                        <button class="btn btn-outline-info fa-rotate-180" (click)="comeBack()">
+                            <i class="bi bi-arrow-return-right"></i>
+                        </button>
+                    </div>
+                    <div class="col-sm-10">
+                        <h2 class="text-center text-info mt-3 mb-3 my-title">Chỉnh sửa thông tin</h2>
+                    </div>
+                    <div class="col-sm-1"></div>
+
+                </div>
+
+                <form #myForm="ngForm" [formGroup]="formUpdate" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Ảnh: </label>
+                            </div>
+                            <div class="col-md-9 d-flex flex-column">
+                                <div class="d-flex">
+                                    <label>
+                                        <input #uploadFile type="file" (change)="onSelectFile($event)">
+                                        <div class="btn btn-outline-naucam">Chọn file</div>
+                                    </label>
+                                    <img *ngIf="imgURL" src="{{imgURL}}" class="img-custom">
+                                    <img *ngIf="avatarURL && !imgURL" src="{{avatarURL}}" class="img-custom">
+                                </div>
+                                <div>
+                                    <div *ngIf="errorFiles" class="login-error pb-0">
+                                        <i class="bi bi-exclamation-circle"></i> {{errorFiles}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Họ và tên <span class="text-red">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" formControlName="fullname"
+                                       placeholder="Nhập họ và tên"
+                                       [ngClass]="{ 'is-invalid': (submitted || formValid.fullname.touched) && formValid.fullname.errors}">
+                                <div *ngIf="(submitted || formValid.fullname.touched) && formValid.fullname.errors"
+                                     class="invalid-feedback login-error pb-0">
+                                    <div *ngIf="formValid.fullname.errors.required">
+                                        <i class="bi bi-exclamation-circle"></i>
+                                        Vui lòng nhập họ và tên!
+                                    </div>
+                                    <div *ngIf="formValid.fullname.errors.pattern">
+                                        <i class="bi bi-exclamation-circle"></i> Họ và tên cho phép tối đa 50 ký tự chỉ
+                                        bao gồm chữ cái!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Tên tài khoản <span class="text-red">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" formControlName="accountName"
+                                       placeholder="Nhập tên tài khoản"
+                                       [ngClass]="{ 'is-invalid': (submitted || formValid.accountName.touched ) && formValid.accountName.errors }">
+                                <div
+                                    *ngIf="(submitted || formValid.accountName.touched ) && formValid.accountName.errors"
+                                    class="invalid-feedback login-error pb-0">
+                                    <div *ngIf="formValid.accountName.errors.required">
+                                        <i class="bi bi-exclamation-circle"></i> Vui lòng nhập tên tài khoản!
+                                    </div>
+                                    <div *ngIf="formValid.accountName.errors.pattern">
+                                        <i class="bi bi-exclamation-circle"></i> Tài khoản hợp lệ có 3-50 ký tự bao gồm
+                                        chữ cái, số và dấu gạch dưới!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                    <div class="form-group">-->
+                    <!--                        <div class="row">-->
+                    <!--                            <div class="col-md-3">-->
+                    <!--                                <label>Mật khẩu <span class="text-red">*</span></label>-->
+                    <!--                            </div>-->
+                    <!--                            <div class="col-md-9">-->
+                    <!--                                <input type="text" class="form-control" formControlName="password"-->
+                    <!--                                       placeholder="Nhập mật khẩu"-->
+                    <!--                                       [ngClass]="{ 'is-invalid': (submitted || formValid.password.touched ) && formValid.password.errors }">-->
+                    <!--                                <div *ngIf="(submitted || formValid.password.touched ) && formValid.password.errors"-->
+                    <!--                                     class="invalid-feedback login-error pb-0">-->
+                    <!--                                    <div *ngIf="formValid.password.errors.required">-->
+                    <!--                                        <i class="bi bi-exclamation-circle"></i> Vui lòng nhập mật khẩu!-->
+                    <!--                                    </div>-->
+                    <!--                                    <div *ngIf="formValid.password.errors.pattern">-->
+                    <!--                                        <i class="bi bi-exclamation-circle"></i> Mật khẩu hợp lệ có 6-50 ký tự bao gồm-->
+                    <!--                                        chữ cái, số và dấu gạch dưới!-->
+                    <!--                                    </div>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Ngày sinh <span class="text-red">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="date" class="form-control" formControlName="dateOfBirth"
+                                       placeholder="Nhập tiêu đề PAKN"
+                                       [ngClass]="{ 'is-invalid': (submitted || formValid.dateOfBirth.touched ) && formValid.dateOfBirth.errors }">
+                                <div
+                                    *ngIf="(submitted || formValid.dateOfBirth.touched ) && formValid.dateOfBirth.errors"
+                                    class="invalid-feedback login-error pb-0">
+                                    <div *ngIf="formValid.dateOfBirth.errors.required">
+                                        <i class="bi bi-exclamation-circle"></i> Vui chọn ngày sinh!
+                                    </div>
+                                    <div *ngIf="formValid.dateOfBirth.errors.pattern">
+                                        <i class="bi bi-exclamation-circle"></i> Ngày sinh phải đúng định dạng
+                                        MM-DD-YYYY
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Chức vụ <span class="text-red">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                                <input formControlName="position" type="text" class="form-control"
+                                       placeholder="Nhập chức vụ"
+                                       [ngClass]="{ 'is-invalid': (submitted || formValid.position.touched ) && formValid.position.errors }">
+                                <div *ngIf="(submitted || formValid.position.touched ) && formValid.position.errors"
+                                     class="invalid-feedback login-error pb-0">
+                                    <div *ngIf="formValid.position.errors.required">
+                                        <i class="bi bi-exclamation-circle"></i> Vui lòng nhập chức vụ!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Nơi ứng cử <span class="text-red">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                                <input formControlName="candidateplace" type="text" class="form-control"
+                                       placeholder="Nhập nơi ứng cử"
+                                       [ngClass]="{ 'is-invalid': (submitted || formValid.candidateplace.touched ) && formValid.candidateplace.errors }">
+                                <div
+                                    *ngIf="(submitted || formValid.candidateplace.touched ) && formValid.candidateplace.errors"
+                                    class="invalid-feedback login-error pb-0">
+                                    <div *ngIf="formValid.candidateplace.errors.required">
+                                        <i class="bi bi-exclamation-circle"></i> Vui lòng nhập nơi ứng cử!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Cơ quan <span class="text-red">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                                <select formControlName="agency" class="form-control w-100"
+                                        [ngClass]="{ 'is-invalid': (submitted || formValid.agency.touched ) && formValid.agency.errors }">
+                                    <option value="" disabled selected hidden> -- Chọn cơ quan --</option>
+                                    <option *ngFor="let item of listAgency" [value]="item.value">{{item.name}}</option>
+                                </select>
+                                <div *ngIf="(submitted || formValid.agency.touched ) && formValid.agency.errors"
+                                     class="invalid-feedback login-error pb-0">
+                                    <div *ngIf="formValid.agency.errors.required">
+                                        <i class="bi bi-exclamation-circle"></i> Vui lòng chọn cơ quan!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Vai trò <span class="text-red">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                                <select formControlName="role" class="form-control w-100"
+                                        [ngClass]="{ 'is-invalid': (submitted || formValid.role.touched ) && formValid.role.errors }">
+                                    <option value="" disabled selected hidden> -- Chọn vai trò --</option>
+                                    <option *ngFor="let item of listRole" [value]="item.value">{{item.name}}</option>
+                                </select>
+                                <div *ngIf="(submitted || formValid.role.touched ) && formValid.role.errors"
+                                     class="invalid-feedback login-error pb-0">
+                                    <div *ngIf="formValid.role.errors.required">
+                                        <i class="bi bi-exclamation-circle"></i> Vui lòng chọn vai trò!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Trạng thái <span class="text-red">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                                <select formControlName="status" class="form-control w-100"
+                                        [ngClass]="{ 'is-invalid': (submitted || formValid.status.touched ) && formValid.status.errors }">
+                                    <option value="" disabled selected hidden> -- Chọn trạng thái --</option>
+                                    <option style="padding: 20px" *ngFor="let item of listStatus"
+                                            [value]="item.value">{{item.name}}</option>
+                                </select>
+                                <div *ngIf="(submitted || formValid.status.touched ) && formValid.status.errors"
+                                     class="invalid-feedback login-error pb-0">
+                                    <div *ngIf="formValid.status.errors.required">
+                                        <i class="bi bi-exclamation-circle"></i> Vui lòng nhập trạng thái!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-9">
+                                <div *ngIf="error" class="text-red"><i class="bi bi-exclamation-circle"></i> {{error}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-block btn-primary"> Cập nhật</button>
+                </form>
+                <div [ngClass]="{ 'show': success }" class="thongbao">
+                    <i class="bi bi-check-lg"></i> {{success}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,8 +1,12 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+
+const httpOptions = {
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
+};
 
 const URL = `${environment.baseUrlServer}` + 'api/account';
 
@@ -43,5 +47,21 @@ export class AccountService {
         return this.http.get(`${URL}/${id}`).pipe(catchError(this.handleError));
     }
 
+    updateAccountByID(id: any, data: any): Observable<any> {
+        return this.http.put(`${URL}/${id}`, data, httpOptions)
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    updateAvatarAccountByID(id: any, avatar: File): Observable<any> {
+        const formData: FormData = new FormData();
+        formData.append('avatar', avatar);
+
+        return this.http.put(`${URL + '/avatar'}/${id}`, formData)
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
 
 }

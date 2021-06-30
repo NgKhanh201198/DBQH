@@ -1,6 +1,8 @@
 package daibieuquochoi.backend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -49,6 +51,7 @@ public class AccountEntity extends BaseEntity {
 	private String status;
 
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private Set<FeedbackEntity> feedback = new HashSet<FeedbackEntity>();
 
 	@ManyToOne

@@ -6,6 +6,42 @@
         <li class="nav-item d-none d-sm-inline-block">
             <a [routerLink]="['/trang-quan-tri']" class="nav-link">Trang chủ</a>
         </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle username text-white" href="" id="navbarDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span><i class="bi bi-person-check-fill menu-icon"></i> sssssss</span>
+            </a>
+            <div class="dropdown-menu build-drop-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item d-flex align-items-center" [routerLink]="['','trang-quan-tri']">
+                    <i class="bi bi-person-circle menu-icon"></i>
+                    <span>Trang quản trị</span>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" [routerLink]="['','dang-nhap']"
+                   (click)="logout()">
+                    <i class="bi bi-power menu-icon"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown" style="margin-right: 55px">
+            <a style="color: #17a2b8" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <span><i class="bi bi-person-check-fill menu-icon"></i> {{accountName}}</span>
+            </a>
+            <div class="dropdown-menu build-drop-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item d-flex align-items-center" [routerLink]="['','trang-chu']">
+                    <i class="bi bi-arrow-up-left-square-fill menu-icon"></i>
+                    <span>Trang web</span>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" [routerLink]="['','dang-nhap']"
+                   (click)="logout()">
+                    <i class="bi bi-power menu-icon"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </li>
     </ul>
 </nav>
 <aside class="main-sidebar sidebar-dark-primary elevation-4" style="height: 100vh !important;">
@@ -30,18 +66,6 @@
                        class="nav-link">
                         <i class="nav-icon bi bi-person-fill"></i>
                         <p>Danh sách tài khoản</p>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <div class="logout">
-        <nav>
-            <ul class="nav nav-pills nav-sidebar flex-column">
-                <li class="nav-item logout-li">
-                    <a class="nav-link" [routerLink]="['','dang-nhap']" (click)="logout()">
-                        <i class="nav-icon fas fa-power-off"></i>
-                        <p>Đăng xuất</p>
                     </a>
                 </li>
             </ul>

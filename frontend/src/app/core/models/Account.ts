@@ -2,7 +2,7 @@ import {ERole} from './erole.enum';
 
 export class Account {
     id: number;
-    accountname: string;
+    accountName: string;
     fullName: string;
     dateOfBirth: string;
     avatar: string;
