@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../core/services/authentication.service';
 import {Router} from '@angular/router';
 import {Account} from '../../core/models/Account';
+import {LoggerService} from '../../core/services/logger.service';
 
 @Component({
     selector: 'app-nav-admin',
@@ -14,14 +15,15 @@ export class NavAdminComponent implements OnInit {
 
     constructor(
         private auth: AuthenticationService,
-        private router: Router
+        private router: Router,
+        private logger: LoggerService
     ) {
     }
 
     ngOnInit(): void {
         this.currentAccount = this.auth.currentAccountValue;
         this.accountName = this.currentAccount.accountName;
-        console.log(this.accountName);
+        this.logger.log(this.accountName);
     }
 
     logout(): void {

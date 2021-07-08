@@ -1,39 +1,39 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DangnhapComponent} from './pages/dangnhap/dangnhap.component';
-import {TrangchuComponent} from './pages/trangchu/trangchu.component';
-import {ChitietComponent} from './pages/chitiet/chitiet.component';
-import {TiepnhanphananhComponent} from './pages/tiepnhanphananh/tiepnhanphananh.component';
 import {AuthenticationGuard} from './core/guard/authentication.guard';
 import {ERole} from './core/models/erole.enum';
+import {HomeComponent} from './pages/home/home.component';
+import {DetailComponent} from './pages/detail/detail.component';
+import {RecommendationsComponent} from './pages/recommendations/recommendations.component';
+import {LoginComponent} from './pages/login/login.component';
 import {AdminComponent} from './admin/admin.component';
 
 const routes: Routes = [
     {
         path: 'dang-nhap',
-        component: DangnhapComponent
+        component: LoginComponent
     },
     {
         path: 'trang-chu',
-        component: TrangchuComponent,
+        component: HomeComponent,
         canActivate: [AuthenticationGuard],
         data: {roles: [ERole.ADMIN, ERole.USER]}
     },
     {
         path: 'chi-tiet',
-        component: ChitietComponent,
+        component: DetailComponent,
         canActivate: [AuthenticationGuard],
         data: {roles: [ERole.ADMIN, ERole.USER]}
     },
     {
         path: 'tiep-nhan-phan-anh',
-        component: TiepnhanphananhComponent,
+        component: RecommendationsComponent,
         canActivate: [AuthenticationGuard],
         data: {roles: [ERole.ADMIN, ERole.USER]}
     },
     {
         path: 'trang-quan-tri',
-        loadChildren: () => import('src/app/admin/admin.module').then(module => module.AdminModule),
+        loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
         canActivate: [AuthenticationGuard],
         data: {roles: [ERole.ADMIN]}
     },

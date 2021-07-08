@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -74,11 +75,9 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public final ResponseEntity<?> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
-        System.out.println(ex.getMessage());
         List<String> details = ex.getConstraintViolations()
                 .parallelStream().map(e -> e.getMessage()).collect(Collectors.toList());
         return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.name(), details.get(0), request.getDescription(false)));
     }
-
 }

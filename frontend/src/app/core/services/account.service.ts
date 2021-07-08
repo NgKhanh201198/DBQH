@@ -57,11 +57,9 @@ export class AccountService {
     updateAvatarAccountByID(id: any, avatar: File): Observable<any> {
         const formData: FormData = new FormData();
         formData.append('avatar', avatar);
-
         return this.http.put(`${URL + '/avatar'}/${id}`, formData)
             .pipe(
                 catchError(this.handleError)
             );
     }
-
 }

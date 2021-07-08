@@ -15,6 +15,7 @@ import daibieuquochoi.backend.service.Impl.RoleServiceImpl;
 import daibieuquochoi.backend.service.UploadFileService;
 import daibieuquochoi.backend.service.UserDetailsImpl;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -111,7 +114,6 @@ public class AccountController {
             if (accountService.isExistsByAccountName(accountName)) {
                 return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), "Tên tài khoản '" + accountName + "' đã được sử dụng!"));
             }
-            CommonController controller = new CommonController();
             AccountEntity accountEntity = new AccountEntity();
 
 //            Set Role
@@ -121,7 +123,13 @@ public class AccountController {
             AgencyEntity agencyEntity = agencyService.findByAgencyName(agency).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy cơ quan " + agency));
 
 //            Set DateOfBirth
-            Date date = controller.stringToDate(dateOfBirth);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = null;
+            try {
+                date = formatter.parse(dateOfBirth);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
 //             Set Avatar
             String[] allowedMimeTypes = new String[]{"image/gif", "image/png", "image/jpeg"};
@@ -228,8 +236,12 @@ public class AccountController {
                 AgencyEntity agencyEntity = agencyService.findByAgencyName(accountDTO.getAgency()).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy cơ quan " + accountDTO.getAgency()));
 
                 // Set DateOfBirth
-                CommonController commonController = new CommonController();
-                Date date = commonController.stringToDate(accountDTO.getDateOfBirth());
+                Date date = null;
+                try {
+                    date = DateUtils.parseDate(accountDTO.getDateOfBirth(), new String[]{"yyyy-MM-dd", "dd-MM-yyyy"});
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
                 oldAccountEntity.setAccountName(accountDTO.getAccountName());
                 oldAccountEntity.setFullname(accountDTO.getFullname());
@@ -268,7 +280,7 @@ public class AccountController {
                 String fileName = avatar.getOriginalFilename().substring(avatar.getOriginalFilename().length() - 4);
 
                 String uuidImage = "avatar-" + UUID.randomUUID().toString().replaceAll("-", "") + fileName.toLowerCase();
-                String urlAvatar = BASE_URL + "api/files/" + uuidImage;
+                String urlAvatar = BASE_URL + "api/avatar/" + uuidImage;
                 if (olAccountEntity.getAvatar() != null) {
                     uploadFileService.deleteByName(olAccountEntity.getAvatar().substring(olAccountEntity.getAvatar().length() - uuidImage.length()));
                 }

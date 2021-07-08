@@ -23,7 +23,6 @@ export class NavbarComponent implements OnInit {
     ngOnInit(): void {
         this.currentAccount = this.auth.currentAccountValue;
         this.accountService.getAccountByID(this.currentAccount.id).subscribe((result) => {
-            console.log(result);
             this.accountName = result.accountName;
         });
     }

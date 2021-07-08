@@ -31,11 +31,11 @@ public class AgencyEntity extends BaseEntity {
     @Column(name = "status")
     private String status;
 
-    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "agency")
     @JsonIgnore
     private Set<AccountEntity> accounts = new HashSet<AccountEntity>();
 
-    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "agency")
     @JsonIgnore
     private Set<RecommendationsEntity> recommendations = new HashSet<RecommendationsEntity>();
 

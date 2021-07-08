@@ -54,7 +54,7 @@ public class RecommendationsEntity extends BaseEntity {
     private String status;
 
     @Column(name = "reportingdeadline")
-    private Long reportingdeadline;
+    private Date reportingdeadline;
 
     @Column(name = "fields")
     private String fields;
@@ -70,7 +70,7 @@ public class RecommendationsEntity extends BaseEntity {
         super();
     }
 
-    public RecommendationsEntity(Long id, String object, String fullname, String address, String phonenumber, String email, String title, String contents, String files, Long reportingdeadline, String commenttype, String fields, String status, AgencyEntity agency, Set<FeedbackEntity> feedback) {
+    public RecommendationsEntity(Long id, String object, String fullname, String address, String phonenumber, String email, String title, String contents, String files, Date reportingdeadline, String commenttype, String fields, String status, AgencyEntity agency, Set<FeedbackEntity> feedback) {
         this.id = id;
         this.object = object;
         this.fullname = fullname;
@@ -160,11 +160,11 @@ public class RecommendationsEntity extends BaseEntity {
         this.files = files;
     }
 
-    public Long getReportingdeadline() {
+    public Date getReportingdeadline() {
         return reportingdeadline;
     }
 
-    public void setReportingdeadline(Long reportingdeadline) {
+    public void setReportingdeadline(Date reportingdeadline) {
         this.reportingdeadline = reportingdeadline;
     }
 

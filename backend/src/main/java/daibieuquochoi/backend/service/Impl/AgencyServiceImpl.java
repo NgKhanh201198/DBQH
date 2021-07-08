@@ -3,6 +3,7 @@ package daibieuquochoi.backend.service.Impl;
 import daibieuquochoi.backend.entity.AgencyEntity;
 import daibieuquochoi.backend.repository.AgencyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import daibieuquochoi.backend.service.IAgencyService;
@@ -27,7 +28,7 @@ public class AgencyServiceImpl implements IAgencyService {
 
     @Override
     public List<AgencyEntity> getAll() {
-        return agencyRepository.findAll();
+        return agencyRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION.DESC, "id"));
     }
 
     @Override

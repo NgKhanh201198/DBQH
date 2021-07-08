@@ -1,0 +1,58 @@
+<div class="wrapper">
+    <app-nav-admin></app-nav-admin>
+
+    <div class="content-wrapper h">
+        <div class="content pt-3">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-header p-0">
+                        <div class="row justify-content-center">
+                            <div class="col-sm-10">
+                                <h4 class="pl-4 text-info mt-3 mb-3">Danh sách cơ quan</h4>
+                            </div>
+                            <div class="col-sm-2 d-flex align-items-center justify-content-center">
+                                <a [routerLink]="['/trang-quan-tri','them-co-quan']"
+                                   class="btn btn-outline-success float-right"><i class="fas fa-plus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr class="text-center">
+                                <th style="width:20%" scope="col">Tên cơ quan</th>
+                                <th style="width:15%" scope="col">Trạng thái</th>
+                                <th style="width:40%" scope="col">Ghi chú</th>
+                                <th style="width:25%" scope="col">Thao tác</th>
+                            </tr>
+                            </thead>
+                            <tbody *ngFor="let item of listAgency| paginate: { itemsPerPage: 5, currentPage: page}">
+                            <tr class="text-center">
+                                <td>{{item.agencyName}}</td>
+                                <td>{{item.status}}</td>
+                                <td>{{item.note}}</td>
+                                <td class="text-center">
+                                    <a [routerLink]="['/trang-quan-tri/danh-sach-co-quan','chinh-sua-thong-tin',item.id]"
+                                       class="btn-edit btn btn-outline-info mx-1"><i class="fas fa-pen"></i></a>
+                                    <botton (click)="deleteAgency(item.id)" class="btn-edit btn btn-outline-danger mx-1"><i
+                                        class="fas fa-trash"></i></botton>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer pb-0">
+                        <pagination-controls class="text-center" (pageChange)="page = $event" maxSize="5">
+                        </pagination-controls>
+                    </div>
+                </div>
+                <div [ngClass]="{ 'show': success }" class="thongbao">
+                    <i class="bi bi-check-lg"></i> {{success}}
+                </div>
+                <div [ngClass]="{ 'show': error }" class="thongbaoloi">
+                    <i class="bi bi-exclamation-circle"></i> {{error}} <span class="pointer" (click)="closeError()"><i class="bi bi-x"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

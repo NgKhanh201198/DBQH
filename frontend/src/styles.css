@@ -26,6 +26,14 @@ html, body {
     width: 10% !important;
 }
 
+.w-15 {
+    width: 15% !important;
+}
+
+.w-80 {
+    width: 80% !important;
+}
+
 .w-90 {
     width: 90% !important;
 }
@@ -163,7 +171,7 @@ a.text-info:hover {
     width: 100px;
     height: 100px;
     border-radius: 50px;
-    background-color: #C9E4D6;
+    background-color: #C8E2B1;
     margin: 0 auto;
 }
 
@@ -189,7 +197,7 @@ a.text-info:hover {
 .attach-file-chat {
     width: 94%;
     padding: 4px 10px;
-    background-color: #f5cac3;
+    background-color: #fcdad5;
     border-radius: 3px;
 }
 
@@ -197,7 +205,7 @@ a.text-info:hover {
     width: 50px;
     height: 50px;
     border-radius: 3px;
-    background-color: #367517;
+    background-color: #489620;
     margin-right: 10px;
 }
 
@@ -210,7 +218,7 @@ a.text-info:hover {
 .attach-file-reply {
     width: 94%;
     padding: 4px 10px;
-    background-color: #C9E4D6;
+    background-color: #C8E2B1;
     border-radius: 3px;
 }
 
@@ -282,6 +290,10 @@ input[type="radio"]:checked {
     border-color: #dc3545;
 }
 
+.is-invalid-select ~ .invalid-feedback {
+    display: block;
+}
+
 a.active-nav {
     border-bottom: 1px solid #fff;
     padding: 8px 0px 0px 0px !important;
@@ -298,7 +310,7 @@ a.active-nav {
 .dropdown-menu.show {
     right: 15px;
     left: auto;
-    padding: 2px 0px;
+    padding: 0px;
     border: 1px solid #17a2b8;
 }
 
@@ -315,7 +327,7 @@ a.active-nav {
 
 .thongbao {
     position: fixed;
-    right: 50px;
+    right: 55px;
     top: 100px;
     width: auto;
     padding: 10px 25px;
@@ -323,7 +335,22 @@ a.active-nav {
     border: 1px solid #32dc32;
     border-radius: 3px;
     z-index: 9999;
-    transition: 5s;
+    transition: 6s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.thongbaoloi {
+    position: fixed;
+    right: 55px;
+    top: 100px;
+    width: auto;
+    padding: 10px 25px;
+    background-color: #fcdad5;
+    border: 1px solid #e54646;
+    border-radius: 3px;
+    z-index: 9999;
+    transition: 3s;
     visibility: hidden;
     opacity: 0;
 }
@@ -332,8 +359,17 @@ a.active-nav {
     animation: active 3s forwards;
 }
 
+.thongbaoloi.show {
+    animation: active 6s forwards;
+}
+
 .thongbao i {
     color: green;
+    font-size: 1.5em;
+}
+
+.thongbaoloi i {
+    color: red;
     font-size: 1.5em;
 }
 
@@ -342,12 +378,12 @@ a.active-nav {
         transform: translateX(350px);
         opacity: 0;
     }
-    30% {
+    25% {
         transform: translateX(0px);
         opacity: 1;
         visibility: visible;
     }
-    75% {
+    85% {
         transform: translateX(0px);
         opacity: 1;
         visibility: visible;
@@ -402,4 +438,56 @@ ul.ngx-pagination .pagination-next.disabled::after {
 
 .logout-li a {
     color: rgba(255, 255, 255, .75) !important;
+}
+
+.btn-feedback {
+    background-color: #50A625;
+    padding: 2px 10px;
+    width: 13%;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+}
+
+.btn-chuyentiep {
+    background-color: #00B2BF;
+    padding: 2px 10px;
+    margin-left: 10px;
+    width: 14%;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+}
+
+.feedback-section {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 99;
+    display: table;
+    height: 100vh;
+    width: 100%;
+    background-color: #808080d1;
+}
+
+.feedback-form {
+    background-color: #fcdad5;
+    padding: 30px 30px 20px 30px;
+    margin-top: 10px;
+    visibility: visible;
+    border-radius: 3px;
+}
+
+.icon-close {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    padding: 0px 3px;
+}
+
+.icon-close:hover {
+    color: red;
 }

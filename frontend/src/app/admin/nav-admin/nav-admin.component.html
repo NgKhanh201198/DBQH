@@ -31,11 +31,11 @@
                 <span><i class="bi bi-person-check-fill menu-icon"></i> {{accountName}}</span>
             </a>
             <div class="dropdown-menu build-drop-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item d-flex align-items-center" [routerLink]="['','trang-chu']">
-                    <i class="bi bi-arrow-up-left-square-fill menu-icon"></i>
+                <a class="dropdown-item d-flex align-items-center py-2" [routerLink]="['','trang-chu']">
+                    <i class="bi bi-arrow-up-left-square menu-icon"></i>
                     <span>Trang web</span>
                 </a>
-                <a class="dropdown-item d-flex align-items-center" [routerLink]="['','dang-nhap']"
+                <a class="dropdown-item d-flex align-items-center py-2" [routerLink]="['','dang-nhap']"
                    (click)="logout()">
                     <i class="bi bi-power menu-icon"></i>
                     <span>Đăng xuất</span>
@@ -66,6 +66,14 @@
                        class="nav-link">
                         <i class="nav-icon bi bi-person-fill"></i>
                         <p>Danh sách tài khoản</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a [routerLink]="['/trang-quan-tri','danh-sach-co-quan']" [routerLinkActive]="['active']"
+                       class="nav-link">
+                        <i class="nav-icon bi bi-grid-3x3-gap-fill"></i>
+<!--                        <i class="nav-icon bi bi-bank"></i>-->
+                        <p>Danh sách cơ quan</p>
                     </a>
                 </li>
             </ul>

@@ -1,0 +1,71 @@
+<div class="wrapper">
+    <app-nav-admin></app-nav-admin>
+
+    <div class="content-wrapper h">
+        <div class="content pt-3">
+            <div class="container pb-5 px-5">
+                <div class="row justify-content-center">
+                    <div class="col-sm-12">
+                        <h2 class="text-center text-info mt-3 mb-5 my-title">Cập nhật thông tin cơ quan</h2>
+                    </div>
+                </div>
+
+                <form #myForm="ngForm" [formGroup]="formUpdate" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Tên cơ quan <span class="text-red">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" formControlName="agencyName"
+                                       placeholder="Nhập tên cơ quan"
+                                       [ngClass]="{ 'is-invalid': (submitted || formValid.agencyName.touched) && formValid.agencyName.errors}">
+                                <div *ngIf="(submitted || formValid.agencyName.touched) && formValid.agencyName.errors"
+                                     class="invalid-feedback login-error pb-0">
+                                    <div *ngIf="formValid.agencyName.errors.required">
+                                        <i class="bi bi-exclamation-circle"></i>
+                                        Vui lòng nhập tên cơ quan!
+                                    </div>
+                                    <div *ngIf="formValid.agencyName.errors.pattern">
+                                        <i class="bi bi-exclamation-circle"></i> Tên cơ quan cho phép tối đa 50 ký tự
+                                        chỉ bao gồm chữ cái!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Trạng thái</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" formControlName="status"
+                                       placeholder="Nhập trạng thái">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Ghi chú</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" formControlName="note"
+                                       placeholder="Nhập ghi chú">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-block btn-primary"> Cập nhật</button>
+                </form>
+                <div [ngClass]="{ 'show': success }" class="thongbao">
+                    <i class="bi bi-check-lg"></i> {{success}}
+                </div>
+                <div [ngClass]="{ 'show': error }" class="thongbaoloi">
+                    <i class="bi bi-exclamation-circle"></i> {{error}}
+                    <span class="pointer" (click)="closeError()"><i class="bi bi-x"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

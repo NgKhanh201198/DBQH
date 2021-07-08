@@ -1,0 +1,83 @@
+<header>
+    <app-navbar></app-navbar>
+</header>
+<section class="home-section">
+    <div class="container-fluid p-3">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card rounded-0">
+                    <div class="card-body">
+                        <div class="all-suggestions">HUYỆN, THÀNH PHỐ</div>
+                        <hr class="m-0">
+                        <div>Hà nội</div>
+                        <div>Hồ chí minh</div>
+                        <div>Đà nẵng</div>
+                        <div>Hải phòng</div>
+                        <div>Cà mau</div>
+                        <div>Đồng nai</div>
+                        <div>Hà tĩnh</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card rounded-0">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex ">
+                                    <div class="all-suggestions mr-3">TẤT CẢ ĐỀ NGHỊ</div>
+                                    <a [routerLink]="['','tiep-nhan-phan-anh']" class="btn btn-outline-info">
+                                        <i class="bi bi-plus-lg"></i> </a>
+                                </div>
+                                <hr class="m-0">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group md-form form-sm form-2 pl-0">
+                                    <input [(ngModel)]="keyword" class="form-control my-0 py-1 red-border" type="text"
+                                           placeholder="Tìm kiếm"
+                                           aria-label="Search">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-info" (click)="search(keyword)">Tìm</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <table class="table">
+                                    <tr *ngFor="let item of listRecommendations| paginate: { itemsPerPage: 5, currentPage: page}; index as i">
+                                        <td class="text-center w-5" [ngClass]="{'border-0 ':(i+1==1)}">
+                                            {{i + 1}}
+                                        </td>
+                                        <td class="w-15"[ngClass]="{'border-0 ':(i+1==1)}">
+                                            {{item.status}}
+                                        </td>
+                                        <td class="w-80" [ngClass]="{'border-0 ':(i+1==1)}">
+                                            <div>
+                                                <div>
+                                                    {{item.contents}}
+                                                </div>
+                                                <div class="d-flex justify-content-end">
+                                                    <a [routerLink]="['','chi-tiet']" [queryParams]="{id:item.id}"
+                                                       class="text-info pointer">
+                                                        <i class="bi bi-pencil-square"></i> Sửa
+                                                    </a>
+                                                    <a [routerLink]="['','chi-tiet']" [queryParams]="{id:item.id}"
+                                                       class="text-info pointer ml-3">
+                                                        <i class="bi bi-box-arrow-up-right"></i> Chi tiết
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer pb-0">
+                        <pagination-controls class="text-center" (pageChange)="page = $event" maxSize="5">
+                        </pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
