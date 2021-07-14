@@ -9,13 +9,22 @@
                     <div class="card-body">
                         <div class="all-suggestions">HUYỆN, THÀNH PHỐ</div>
                         <hr class="m-0">
-                        <div>Hà nội</div>
-                        <div>Hồ chí minh</div>
-                        <div>Đà nẵng</div>
-                        <div>Hải phòng</div>
-                        <div>Cà mau</div>
-                        <div>Đồng nai</div>
-                        <div>Hà tĩnh</div>
+                        <div class="closeProvince">
+                            <i (click)="closeProvince()" *ngIf="showProvince" class="bi bi-x"></i>
+                        </div>
+                        <div class="province pointer"
+                             *ngFor="let item of listProvince; index as i"
+                             (click)="selectProvince(item.id, item.name)"
+                             [ngClass]="{'d-none':(i+1!=indexProvince && showProvince),'active':showProvince}">
+                            {{item.name}}
+
+                        </div>
+                        <div class="mt-1" *ngIf="showProvince">
+                            <div *ngFor="let item of listDistrict; index as i"
+                                 (click)="selectDicstric(i, item.name)"
+                                 [ngClass]="{'active':(i == indexDicstric && showDicstric)}"
+                                 class="dicstric pointer">{{item.name}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -33,7 +42,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group md-form form-sm form-2 pl-0">
-                                    <input [(ngModel)]="keyword" class="form-control my-0 py-1 red-border" type="text"
+                                    <input [(ngModel)]="keyword" (ngModelChange)="onChange()"
+                                           class="form-control my-0 py-1 red-border" type="text"
                                            placeholder="Tìm kiếm"
                                            aria-label="Search">
                                     <div class="input-group-append">
@@ -47,7 +57,7 @@
                                         <td class="text-center w-5" [ngClass]="{'border-0 ':(i+1==1)}">
                                             {{i + 1}}
                                         </td>
-                                        <td class="w-15"[ngClass]="{'border-0 ':(i+1==1)}">
+                                        <td class="w-15" [ngClass]="{'border-0 ':(i+1==1)}">
                                             {{item.status}}
                                         </td>
                                         <td class="w-80" [ngClass]="{'border-0 ':(i+1==1)}">
@@ -56,7 +66,8 @@
                                                     {{item.contents}}
                                                 </div>
                                                 <div class="d-flex justify-content-end">
-                                                    <a [routerLink]="['','chi-tiet']" [queryParams]="{id:item.id}"
+                                                    <a [routerLink]="['','chinh-sua-phan-anh']"
+                                                       [queryParams]="{id:item.id}"
                                                        class="text-info pointer">
                                                         <i class="bi bi-pencil-square"></i> Sửa
                                                     </a>

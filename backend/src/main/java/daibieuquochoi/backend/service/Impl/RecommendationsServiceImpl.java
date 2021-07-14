@@ -1,5 +1,6 @@
 package daibieuquochoi.backend.service.Impl;
 
+import daibieuquochoi.backend.entity.AgencyEntity;
 import daibieuquochoi.backend.entity.RecommendationsEntity;
 import daibieuquochoi.backend.repository.RecommendationsRepository;
 import daibieuquochoi.backend.service.IRecommendationsService;
@@ -31,11 +32,25 @@ public class RecommendationsServiceImpl implements IRecommendationsService {
     }
 
     @Override
+    public List<RecommendationsEntity> getRecommendationsByAgency(AgencyEntity agencyEntity) {
+        return recommendationsRepository.findByAgency(agencyEntity);
+    }
+
+    @Override
     public List<RecommendationsEntity> search(String keyword) {
-        System.out.println(keyword);
         if (keyword != null) {
             return recommendationsRepository.search(keyword);
         }
         return recommendationsRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION.DESC, "id"));
+    }
+
+    @Override
+    public void update(RecommendationsEntity recommendationsEntity) {
+        this.recommendationsRepository.save(recommendationsEntity);
+    }
+
+    @Override
+    public void updateStatus(long id, String status) {
+        recommendationsRepository.updateStatus(id, status);
     }
 }

@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
 import {AgencyService} from '../../../core/services/agency.service';
+import {Options} from '../../../core/models/Options';
+import {Location} from '@angular/common';
 
 @Component({
     selector: 'app-create-agency',
@@ -8,21 +10,28 @@ import {AgencyService} from '../../../core/services/agency.service';
     styleUrls: ['./create-agency.component.css']
 })
 export class CreateAgencyComponent implements OnInit {
+    @ViewChild('myForm') myForm: NgForm;
     formData: FormGroup;
     submitted = false;
     success = '';
     error = '';
 
+    listStatus: Options[] = [
+        {name: 'Hoạt động', value: 'Hoạt động'},
+        {name: 'Không hoạt động', value: 'Không hoạt động'}
+    ];
+
     constructor(
         private formBuilder: FormBuilder,
-        private agencyService: AgencyService
+        private agencyService: AgencyService,
+        private location: Location
     ) {
     }
 
     ngOnInit(): void {
         this.formData = this.formBuilder.group({
             agencyName: ['', [Validators.required, Validators.pattern(/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]{0,50}$/)]],
-            status: [''],
+            status: [null, [Validators.required]],
             note: [''],
         });
     }
@@ -35,17 +44,25 @@ export class CreateAgencyComponent implements OnInit {
         this.error = '';
     }
 
+    comeBack() {
+        this.location.back();
+    }
+
     onSubmit(): void {
         this.submitted = true;
-
-        this.agencyService.createAgency(this.formData.value).subscribe({
-            next: (response) => {
-                this.success = response.message;
-            },
-            error: (err) => {
-                this.error = err.message;
-            }
-        });
+        this.success = '';
+        if (this.formData.status === 'VALID') {
+            this.agencyService.createAgency(this.formData.value).subscribe({
+                next: (response) => {
+                    this.submitted = false;
+                    this.myForm.resetForm();
+                    this.success = response.message;
+                },
+                error: (err) => {
+                    this.error = err.message;
+                }
+            });
+        }
 
         setTimeout(() => {
             this.success = '';

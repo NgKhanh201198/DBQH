@@ -21,16 +21,24 @@
                             <thead>
                             <tr class="text-center">
                                 <th style="width:20%" scope="col">Tên cơ quan</th>
-                                <th style="width:15%" scope="col">Trạng thái</th>
                                 <th style="width:40%" scope="col">Ghi chú</th>
-                                <th style="width:25%" scope="col">Thao tác</th>
+                                <th style="width:20%" scope="col">Trạng thái</th>
+                                <th style="width:20%" scope="col">Thao tác</th>
                             </tr>
                             </thead>
                             <tbody *ngFor="let item of listAgency| paginate: { itemsPerPage: 5, currentPage: page}">
                             <tr class="text-center">
                                 <td>{{item.agencyName}}</td>
-                                <td>{{item.status}}</td>
                                 <td>{{item.note}}</td>
+<!--                                <td>{{item.status}}</td>-->
+                                <td class="text-left">
+                                    <div class="px-2 status-active" *ngIf="item.status=='Hoạt động'"><i
+                                        class="bi bi-circle-fill"></i> Hoạt động
+                                    </div>
+                                    <div class="px-2 status-locked" *ngIf="item.status=='Không hoạt động'"><i
+                                        class="bi bi-circle-fill"></i> Không hoạt động
+                                    </div>
+                                </td>
                                 <td class="text-center">
                                     <a [routerLink]="['/trang-quan-tri/danh-sach-co-quan','chinh-sua-thong-tin',item.id]"
                                        class="btn-edit btn btn-outline-info mx-1"><i class="fas fa-pen"></i></a>

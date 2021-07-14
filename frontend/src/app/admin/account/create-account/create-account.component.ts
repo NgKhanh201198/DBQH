@@ -4,6 +4,7 @@ import {AgencyService} from '../../../core/services/agency.service';
 import {ERole} from '../../../core/models/erole.enum';
 import {AccountService} from '../../../core/services/account.service';
 import {Options} from '../../../core/models/Options';
+import {LoggerService} from '../../../core/services/logger.service';
 
 @Component({
     selector: 'app-create-account',
@@ -35,7 +36,8 @@ export class CreateAccountComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private accountService: AccountService,
-        private agencyService: AgencyService
+        private agencyService: AgencyService,
+        private logger: LoggerService
     ) {
         this.agencyService.getAgencyAll().subscribe((result: any) => {
             result.forEach((element) => {
@@ -84,7 +86,7 @@ export class CreateAccountComponent implements OnInit {
         } else {
             this.formData.get('avatar').setValue(this.currentFile);
         }
-
+        this.logger.log(this.formData.value);
         this.accountService.createAccount(this.formData.value).subscribe({
             next: (response) => {
                 this.error = '';
@@ -99,9 +101,10 @@ export class CreateAccountComponent implements OnInit {
                     this.error = err.message;
                 }
             }
-        }),
-            setTimeout(() => {
-                this.success = '';
-            }, 2500);
+        });
+
+        setTimeout(() => {
+            this.success = '';
+        }, 2500);
     }
 }

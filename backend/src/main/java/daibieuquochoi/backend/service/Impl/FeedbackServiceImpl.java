@@ -20,7 +20,7 @@ public class FeedbackServiceImpl implements IFeedbackService {
     }
 
     @Override
-    public List<FeedbackEntity> getByRecommendations(RecommendationsEntity recommendationsEntity) {
-        return feedbackRepository.findByRecommendationsOrderByIdDesc(recommendationsEntity);
+    public List<FeedbackEntity> getByRecommendations(RecommendationsEntity recommendationsEntity, String status) {
+        return feedbackRepository.findByRecommendationsAndStatusOrderByIdDesc(recommendationsEntity, status);
     }
 }

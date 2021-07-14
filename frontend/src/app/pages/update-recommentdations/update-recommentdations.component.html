@@ -1,7 +1,7 @@
 <section class="recommendation-section">
     <div class="container pb-5" style="background-color: #fff3f3">
         <div class="d-flex justify-content-between align-items-center">
-            <h2 class="pt-3 pb-4">Tiếp nhận phản ánh kiến nghị</h2>
+            <h2 class="pt-3 pb-4">Chỉnh sửa phản ánh kiến nghị</h2>
             <button class="btn btn-outline-info fa-rotate-180" (click)="comeBack()">
                 <i class="bi bi-arrow-return-left"></i>
             </button>
@@ -47,12 +47,12 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-3">
-                        <label>Địa chỉ <span class="text-red pt-">*</span></label>
+                        <label>Địa chỉ <span class="text-red">*</span></label>
                     </div>
                     <div class="col-md-9">
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-md-4 mt-2 mt-md-0">
+                                <div class="col-md-4">
                                     <select [(ngModel)]="tinh" [ngModelOptions]="{standalone: true}"
                                             class="form-control w-100" (change)="selectProvince(tinh)"
                                             [ngClass]="{ 'is-invalid-select': submitted && errorTinh }">
@@ -65,7 +65,7 @@
                                         <i class="bi bi-exclamation-circle"></i> Vui lòng chọn tỉnh/thành phố!
                                     </div>
                                 </div>
-                                <div class="col-md-4 mt-2 mt-md-0">
+                                <div class="col-md-4">
                                     <select [(ngModel)]="huyen" [ngModelOptions]="{standalone: true}"
                                             class="form-control w-100" (change)="selectDistrict(huyen)"
                                             [ngClass]="{ 'is-invalid-select': submitted && errorHuyen }">
@@ -78,7 +78,7 @@
                                         <i class="bi bi-exclamation-circle"></i> Vui lòng chọn quận/huyện!
                                     </div>
                                 </div>
-                                <div class="col-md-4 mt-2 mt-md-0">
+                                <div class="col-md-4">
                                     <select [(ngModel)]="xa" [ngModelOptions]="{standalone: true}"
                                             class="form-control w-100" (change)="selectWard()"
                                             [ngClass]="{ 'is-invalid-select': submitted && errorXa }">
@@ -168,8 +168,7 @@
                                     <input type="radio" class="form-check-input"
                                            [(ngModel)]="commenttype"
                                            [ngModelOptions]="{standalone: true}"
-                                           name="commenttype-radio"
-                                           value="{{item.value}}"
+                                           name="commenttype-radio" value="{{item.value}}"
                                            (change)="hiddenCommentType($event)">{{item.name}}
                                 </label>
                             </div>
@@ -180,12 +179,13 @@
                                     <input type="radio" class="form-check-input"
                                            [(ngModel)]="commenttype"
                                            [ngModelOptions]="{standalone: true}"
-                                           name="commenttype-radio"
+                                           name="commenttype-radio" value="{{newCommenttype}}"
                                            (change)="resetCommentType()">Loại ý kiến khác
                                 </label>
                             </div>
                             <div class="w-100" *ngIf="showCommentType">
-                                <input type="text" class="form-control" (change)="changeCommentType($event)"
+                                <input type="text" class="form-control" value="{{newCommenttype}}"
+                                       (change)="changeCommentType($event)"
                                        placeholder="Nhập loại ý kiến khác">
                             </div>
                         </div>
@@ -222,12 +222,13 @@
                                     <input type="radio" class="form-check-input"
                                            [(ngModel)]="fields"
                                            [ngModelOptions]="{standalone: true}"
-                                           name="fields-radio"
+                                           name="fields-radio" value="{{newFields}}"
                                            (change)="resetFields()">Lĩnh vực khác
                                 </label>
                             </div>
                             <div class="w-100" *ngIf="showFieldes">
                                 <input type="text" class="form-control" (change)="changeFields($event)"
+                                       value="{{newFields}}"
                                        placeholder="Nhập lĩnh vực khác">
                             </div>
                         </div>
@@ -263,7 +264,8 @@
                         <label>Trạng thái <span class="text-red">*</span></label>
                     </div>
                     <div class="col-md-9">
-                        <select formControlName="status" class="form-control w-100" (change)="selectStatus()"
+                        <select formControlName="status" class="form-control w-100"
+                                data-live-search="true" (change)="selectStatus()"
                                 [ngClass]="{ 'is-invalid-select': submitted && formValid.status.errors}">
                             <option hidden value="" selected>Chọn trạng thái</option>
                             <option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</option>
@@ -306,9 +308,9 @@
                         <label>Chọn đơn vị tiếp nhận</label>
                     </div>
                     <div class="col-md-9">
-                        <select formControlName="agency" class="agency form-control w-100"
+                        <select formControlName="agency" class="form-control w-100" data-live-search="true"
                                 (change)="selectAgency()">
-                            <option class="d-none" value="null" selected>Đăng nhập để chọn cơ quan tiếp nhận</option>
+                            <option hidden value="null" selected>Đăng nhập để chọn cơ quan tiếp nhận</option>
                             <option *ngFor="let item of listAgency" [value]="item.value">{{item.name}}</option>
                         </select>
                     </div>
@@ -331,7 +333,7 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-block btn-primary"> Thêm mới</button>
+            <button class="btn btn-block btn-primary"> Cập nhật</button>
         </form>
         <div [ngClass]="{ 'show': success }" class="thongbao">
             <i class="bi bi-check-lg"></i> {{success}}

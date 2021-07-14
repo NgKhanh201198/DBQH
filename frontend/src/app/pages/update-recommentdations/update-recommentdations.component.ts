@@ -1,24 +1,23 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
+import {FormBuilder, NgForm, Validators} from '@angular/forms';
 import {Options} from '../../core/models/Options';
+import {AuthenticationService} from '../../core/services/authentication.service';
 import {LocationsService} from '../../core/services/locations.service';
 import {AgencyService} from '../../core/services/agency.service';
 import {RecommendationsService} from '../../core/services/recommendations.service';
-import {emailOrNullValidator, phoneNumberValidator} from '../../../assets/custom/validation/CustomValidator';
 import {LoggerService} from '../../core/services/logger.service';
-import {Location} from '@angular/common';
-import {AuthenticationService} from '../../core/services/authentication.service';
-import {$} from 'protractor';
+import {formatDate, Location} from '@angular/common';
+import {emailOrNullValidator, phoneNumberValidator} from '../../../assets/custom/validation/CustomValidator';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
-    selector: 'app-recommendations',
-    templateUrl: './recommendations.component.html',
-    styleUrls: ['./recommendations.component.css']
+    selector: 'app-update-recommentdations',
+    templateUrl: './update-recommentdations.component.html',
+    styleUrls: ['./update-recommentdations.component.css']
 })
-export class RecommendationsComponent implements OnInit {
+export class UpdateRecommentdationsComponent implements OnInit {
     @ViewChild('myForm') myForm: NgForm;
     @ViewChild('uploadFile') uploadFile: ElementRef;
-    formData: FormGroup;
     submitted = false;
     errorObject = false;
     errorTinh = false;
@@ -38,19 +37,38 @@ export class RecommendationsComponent implements OnInit {
     listDistrict: Array<Options> = [];
     listWard: Array<Options> = [];
     listAgency: Array<Options> = [];
-    // ngay = false;
-    tinh: any = 'Tỉnh/Thành phố';
-    huyen: any = 'Quận/Huyện';
-    xa: any = 'Phường/Xã';
-    thon: any = '';
+    ngay = false;
+    tinh: any;
+    huyen: any;
+    xa: any;
+    thon: any;
     currentFile: File = null;
     imgURL: any = null;
     errorFiles = '';
     fields = '';
+    newFields = '';
     commenttype = '';
+    newCommenttype = '';
     status = '';
     success = '';
     error = '';
+    id: any;
+
+    formData = this.formBuilder.group({
+        object: ['', [Validators.required]],
+        fullname: ['', [Validators.required]],
+        address: ['', [Validators.required]],
+        phonenumber: ['', [Validators.required, phoneNumberValidator()]],
+        email: ['', [emailOrNullValidator()]],
+        title: ['', [Validators.required]],
+        commenttype: [null, [Validators.required]],
+        fields: [null, [Validators.required]],
+        contents: ['', [Validators.required]],
+        status: ['', [Validators.required]],
+        reportingdeadline: ['', [Validators.required]],
+        agency: [null],
+        files: ['']
+    });
 
     listObject: Options[] = [
         {name: 'Người dân', value: 'Người dân'},
@@ -84,40 +102,72 @@ export class RecommendationsComponent implements OnInit {
         private agencyService: AgencyService,
         private recommendationsService: RecommendationsService,
         private logger: LoggerService,
-        private location: Location
+        private location: Location,
+        private route: ActivatedRoute
     ) {
+        this.listProvince = this.getProvinceAll();
+        this.listAgency = this.getAgencyAll();
     }
 
     ngOnInit(): void {
-        this.listProvince = this.getProvinceAll();
-        this.listAgency = this.getAgencyAll();
-        this.logger.log(this.listProvince);
-        this.logger.log(this.listDistrict);
-        this.logger.log(this.listAgency);
+        this.route.queryParamMap.subscribe((params) => {
+            this.id = params.get('id');
+        });
 
 
+        this.recommendationsService.getRecommendationsByID(this.id).subscribe((result) => {
+            this.commenttype = result.commenttype;
+            this.fields = result.fields;
+            let array = result.address.split(', ');
+            this.thon = array[0];
+            this.xa = array[1];
+            this.huyen = array[2];
+            this.tinh = array[3];
+            this.getDistrictByProvince(this.tinh);
+            this.getWardByDistrict(this.huyen);
 
-        this.formData = this.formBuilder.group({
-            object: ['', [Validators.required]],
-            fullname: ['', [Validators.required]],
-            address: ['', [Validators.required]],
-            phonenumber: ['', [Validators.required, phoneNumberValidator()]],
-            email: ['', [emailOrNullValidator()]],
-            title: ['', [Validators.required]],
-            commenttype: [null, [Validators.required]],
-            fields: [null, [Validators.required]],
-            contents: ['', [Validators.required]],
-            status: ['', [Validators.required]],
-            reportingdeadline: ['', [Validators.required]],
-            agency: [null],
-            files: ['']
+            if (result.reportingdeadline != null) {
+                result.reportingdeadline = formatDate(result.reportingdeadline, 'yyyy-MM-dd', 'en');
+            }
+            // show commenttype
+            let commenttypeName = [];
+            this.listCommentType.forEach((item => commenttypeName.push(item.value)));
+            if (commenttypeName.indexOf(result.commenttype) === -1) {
+                this.showCommentType = true;
+                this.newCommenttype = result.commenttype;
+            }
+
+            // show fields
+            let fieldsName = [];
+            this.listFields.forEach((item => fieldsName.push(item.value)));
+            if (fieldsName.indexOf(result.fields) === -1) {
+                this.showFieldes = true;
+                this.newFields = result.fields;
+            }
+
+            if (result.files) {
+                this.imgURL = result.files.substring(32);
+            }
+
+            this.formData = this.formBuilder.group({
+                object: [result.object, [Validators.required]],
+                fullname: [result.fullname, [Validators.required]],
+                address: [result.address, [Validators.required]],
+                phonenumber: [result.phonenumber, [Validators.required, phoneNumberValidator()]],
+                email: [result.email, [emailOrNullValidator()]],
+                title: [result.title, [Validators.required]],
+                commenttype: [this.commenttype, [Validators.required]],
+                fields: [this.fields, [Validators.required]],
+                contents: [result.contents, [Validators.required]],
+                status: [result.status, [Validators.required]],
+                reportingdeadline: [result.reportingdeadline, [Validators.required]],
+                agency: [result.agency.agencyName],
+                files: ['']
+            });
         });
     }
 
-    get formValid(): any {
-        return this.formData.controls;
-    }
-
+    // Get Data-------------------------------------------------
     getProvinceAll(): Array<Options> {
         this.locationsService.getProvinceAll().subscribe((result: any) => {
             result.forEach((element) => {
@@ -158,16 +208,23 @@ export class RecommendationsComponent implements OnInit {
         return this.listAgency;
     }
 
-    selectObject(): void {
-        this.errorObject = false;
+    // End get data----------------------------------------------------
+
+
+    get formValid(): any {
+        return this.formData.controls;
     }
 
     selectProvince(even): void {
         this.errorTinh = false;
         this.listDistrict = [];
+        this.listWard = [];
+        this.huyen = 'Quận/Huyện';
+        this.xa = 'Phường/Xã';
+        this.formData.patchValue({
+            address: ''
+        });
         this.listDistrict = this.getDistrictByProvince(even);
-        console.log(even);
-        this.logger.log(this.listDistrict);
     }
 
     selectDistrict(even): void {
@@ -181,6 +238,10 @@ export class RecommendationsComponent implements OnInit {
     }
 
     selectThon(): void {
+    }
+
+    selectObject(): void {
+        this.errorObject = false;
     }
 
     selectAgency(): void {
@@ -202,6 +263,8 @@ export class RecommendationsComponent implements OnInit {
     resetCommentType(): void {
         this.showCommentType = true;
         this.errorCommenttype = false;
+        this.newCommenttype = '';
+        this.commenttype = '';
         this.formData.patchValue({
             commenttype: ''
         });
@@ -243,6 +306,8 @@ export class RecommendationsComponent implements OnInit {
     resetFields(): void {
         this.showFieldes = true;
         this.errorFields = false;
+        this.fields = '';
+        this.newFields = '';
         this.formData.patchValue({
             fields: ''
         });
@@ -279,7 +344,7 @@ export class RecommendationsComponent implements OnInit {
     }
 
     onSubmit(): void {
-        // this.ngay = false;
+        this.ngay = false;
         this.submitted = true;
         this.errorObject = false;
         this.errorTinh = false;
@@ -305,11 +370,12 @@ export class RecommendationsComponent implements OnInit {
         if (this.xa === 'Phường/Xã') {
             this.errorXa = true;
         }
-        if (this.tinh !== 'Tỉnh/Thành phố' && this.huyen !== 'Quận/Huyện' && this.xa !== 'Phường/Xã' && this.thon !== '') {
-            this.formData.patchValue({
-                address: this.thon + ', ' + this.xa + ', ' + this.huyen + ', ' + this.tinh
-            });
-        }
+        // if (this.formData.value.reportingdeadline === null) {
+        //     this.ngay = false;
+        // }
+        // if (this.formData.value.agency === null) {
+        //     this.errorAgency = true;
+        // }
 
         //----------------------------------------------------------------
         if (this.formData.value.status === '') {
@@ -348,33 +414,33 @@ export class RecommendationsComponent implements OnInit {
         }
 
         //--------------------------------------------------------------
-        if (this.formData.value.reportingdeadline) {
-            this.formData.get('reportingdeadline').setValue(this.formData.value.reportingdeadline.toString());
-        }
-        if (!this.formData.value.agency) {
-            this.formData.get('agency').setValue(this.auth.currentAccountValue.agency);
+        if (this.tinh !== 'Tỉnh/Thành phố' && this.huyen !== 'Quận/Huyện' && this.xa !== 'Phường/Xã' && this.thon !== '') {
+            this.formData.patchValue({
+                address: this.thon + ', ' + this.xa + ', ' + this.huyen + ', ' + this.tinh
+            });
         }
 
         this.logger.log(this.formData.value);
 
         if (this.formData.status === 'VALID') {
-            this.recommendationsService.create(this.formData.value).subscribe({
+            // this.success = 'OK';
+            this.recommendationsService.update(this.id, this.formData.value).subscribe({
                 next: (response) => {
-                    this.commenttype = '';
-                    this.fields = '';
-                    this.status = '';
-                    this.showCommentType = false;
-                    this.showFieldes = false;
-                    this.showStatus = false;
-                    this.error = '';
-                    this.imgURL = null;
-                    this.submitted = false;
-                    this.uploadFile.nativeElement.value = '';
-                    this.tinh = 'Tỉnh/Thành phố';
-                    this.huyen = 'Quận/Huyện';
-                    this.xa = 'Phường/Xã';
-                    this.thon = '';
-                    this.myForm.resetForm();
+                    // this.commenttype = '';
+                    // this.fields = '';
+                    // this.status = '';
+                    // this.showCommentType = false;
+                    // this.showFieldes = false;
+                    // this.showStatus = false;
+                    // this.error = '';
+                    // this.imgURL = null;
+                    // this.submitted = false;
+                    // this.uploadFile.nativeElement.value = '';
+                    // this.tinh = 'Tỉnh/Thành phố';
+                    // this.huyen = 'Quận/Huyện';
+                    // this.xa = 'Phường/Xã';
+                    // this.thon = '';
+                    // this.myForm.resetForm();
                     this.success = response.message;
                 },
                 error: (err) => {
@@ -391,6 +457,4 @@ export class RecommendationsComponent implements OnInit {
             this.error = '';
         }, 5000);
     }
-
-
 }

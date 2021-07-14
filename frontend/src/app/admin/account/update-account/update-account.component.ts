@@ -6,6 +6,7 @@ import {Options} from '../../../core/models/Options';
 import {ERole} from '../../../core/models/erole.enum';
 import {ActivatedRoute} from '@angular/router';
 import {formatDate, Location} from '@angular/common';
+import {LoggerService} from '../../../core/services/logger.service';
 
 @Component({
     selector: 'app-update-account',
@@ -52,7 +53,8 @@ export class UpdateAccountComponent implements OnInit {
         private route: ActivatedRoute,
         private location: Location,
         private accountService: AccountService,
-        private agencyService: AgencyService
+        private agencyService: AgencyService,
+        private logger: LoggerService
     ) {
         this.agencyService.getAgencyAll().subscribe((result: any) => {
             result.forEach((element) => {
@@ -104,7 +106,7 @@ export class UpdateAccountComponent implements OnInit {
             this.reader.onload = (_event) => {
                 this.imgURL = this.reader.result;
             };
-            console.log('dang ok');
+            this.logger.log('dang ok');
 
             this.accountService.updateAvatarAccountByID(this.id, this.currentFile).subscribe({
                 next: (res) => {
@@ -122,7 +124,7 @@ export class UpdateAccountComponent implements OnInit {
     onSubmit() {
         this.submitted = true;
 
-        console.log(this.formUpdate.value);
+        this.logger.log(this.formUpdate.value);
 
         this.accountService.updateAccountByID(this.id, this.formUpdate.value).subscribe({
             next: (response) => {

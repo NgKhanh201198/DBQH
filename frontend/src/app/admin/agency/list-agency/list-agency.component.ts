@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AgencyService} from '../../../core/services/agency.service';
+import {LoggerService} from '../../../core/services/logger.service';
+import {stringify} from '@angular/compiler/src/util';
 
 @Component({
     selector: 'app-list-agency',
@@ -13,7 +15,8 @@ export class ListAgencyComponent implements OnInit {
     error = '';
 
     constructor(
-        private agencyService: AgencyService
+        private agencyService: AgencyService,
+        private logger: LoggerService
     ) {
     }
 
@@ -28,26 +31,32 @@ export class ListAgencyComponent implements OnInit {
     }
 
     deleteAgency(id: any) {
-
+        this.success = '';
         if (confirm('Bạn có chắc muốn xóa cơ quan này?')) {
             this.agencyService.deleteAgency(id).subscribe({
                 next: (response: any) => {
                     for (let i = 0; i < this.listAgency.length; i++) {
                         if (this.listAgency[i].id === id) {
-                            this.listAgency.splice(i, 1);
+                            // this.listAgency.splice(i, 1);
+                            this.listAgency[i].status = 'Không hoạt động'
                             this.success = response.message;
                         }
                     }
                 },
                 error: (err) => {
                     this.error = err.message;
-                    console.log(this.error);
+                    this.logger.log(this.error);
                 }
             });
-        };
-        setTimeout(() => {
-            this.success = '';
-        }, 3000);
+        }
+        ;
+
+        if (this.success) {
+            setTimeout(() => {
+                this.success = '';
+            }, 3000);
+        }
+
         setTimeout(() => {
             this.error = '';
         }, 5000);

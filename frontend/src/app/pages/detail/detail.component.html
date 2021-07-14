@@ -20,11 +20,9 @@
                                     {{contents}}
                                 </div>
                                 <div class="mb-2 mt-4 d-flex align-items-center justify-content-start">
-                                    <div *ngIf="!this.files">
-                                        <div
-                                            class="attach-icon-chat d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-paperclip"></i>
-                                        </div>
+                                    <div *ngIf="!this.files"
+                                         class="attach-icon-chat d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-paperclip"></i>
                                     </div>
                                     <a *ngIf="this.files" href="{{this.files}}">
                                         <div
@@ -39,20 +37,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div *ngIf="!showForm" class="d-flex justify-content-end">
+                            <div *ngIf="!showForm && !showFormForwarded" class="d-flex justify-content-end">
                                 <div (click)="showFeedbackForm()"
                                      class="btn-feedback d-flex align-items-center justify-content-around">
                                     <i class="bi bi-chat-text" style="font-size: 25px"></i> Phản hồi
                                 </div>
-                                <div (click)="showFeedbackForm()"
+                                <div (click)="showForwarded()"
                                      class="btn-chuyentiep d-flex align-items-center justify-content-around">
                                     Chuyển tiếp <i class="bi bi-caret-right" style="font-size: 25px"></i>
                                 </div>
                             </div>
-
                             <div class="container-fluid p-0" *ngIf="showForm">
                                 <div class="feedback-form">
-                                    <form #myForm="ngForm" [formGroup]="formData" (ngSubmit)="onSubmit()">
+                                    <form #myForm="ngForm" [formGroup]="formData" (ngSubmit)="onSubmitFeedback()">
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-md-3">
@@ -93,11 +90,10 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="form-group mb-2">
                                             <div class="row">
                                                 <div class="col-md-3">
-                                                    <label>Tài liệu đính kèm <span class="text-red">*</span></label>
+                                                    <label>Tài liệu đính kèm</label>
                                                 </div>
                                                 <div class="col-md-9">
                                                     <label class="custom-file-upload">
@@ -106,15 +102,85 @@
                                                         <div class="btn btn-outline-naucam">Chọn file</div>
                                                         {{imgURL}}
                                                     </label>
-                                                    <div *ngIf="errorFiles" class="login-error pb-0">
-                                                        <i class="bi bi-exclamation-circle"></i> {{errorFiles}}
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-end">
                                             <div class="btn btn-outline-danger" (click)="closeForm()"> Hủy</div>
                                             <button class="btn btn-outline-success ml-2"> Phản hồi</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!--   //////////////////////////////////////////////////////////////////////////////////////////////////////  -->
+                            <div class="container-fluid p-0" *ngIf="showFormForwarded">
+                                <div class="forwarded-form">
+                                    <form #myFormForwarded="ngForm" [formGroup]="formDataForwarded"
+                                          (ngSubmit)="onSubmitForwarded()">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label>Chọn đơn vị tiếp nhận <span class="text-red">*</span></label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <select formControlName="agency" class="form-control w-100"
+                                                            [ngClass]="{ 'is-invalid-select': submitted && errorAgency }"
+                                                            (change)="selectAgency()">
+                                                        <option hidden value="null" selected>Chọn cơ quan tiếp nhận
+                                                        </option>
+                                                        <option *ngFor="let item of listAgency"
+                                                                [value]="item.value">{{item.name}}</option>
+                                                    </select>
+                                                    <div *ngIf="submitted && errorAgency" class="login-error pb-0">
+                                                        <i class="bi bi-exclamation-circle"></i> Vui lòng chọn cơ quan
+                                                        tiếp nhận
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label>Tiêu đề chuyển tiếp <span class="text-red">*</span></label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <input type="text" class="form-control" formControlName="title"
+                                                           placeholder="Nhập tiêu đề chuyển tiếp"
+                                                           [ngClass]="{ 'is-invalid': (submitted || formValidForwarded.title.touched ) && formValidForwarded.title.errors }">
+                                                    <div class="invalid-feedback login-error pb-0"
+                                                         *ngIf="(submitted || formValidForwarded.title.touched ) && formValidForwarded.title.errors">
+                                                        <div *ngIf="formValidForwarded.title.errors.required">
+                                                            <i class="bi bi-exclamation-circle"></i> Vui lòng nhập
+                                                            tiêu đề!
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label>Nội dung <span class="text-red">*</span></label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                     <textarea formControlName="contents" class="form-control"
+                                                               cols="30" rows="5" placeholder="Nhập nội dung"
+                                                               [ngClass]="{ 'is-invalid': (submitted || formValidForwarded.contents.touched ) && formValidForwarded.contents.errors }"></textarea>
+                                                    <div
+                                                        *ngIf="(submitted || formValidForwarded.contents.touched ) && formValidForwarded.contents.errors"
+                                                        class="invalid-feedback login-error pb-0">
+                                                        <div *ngIf="formValidForwarded.contents.errors.required">
+                                                            <i class="bi bi-exclamation-circle"></i> Vui lòng
+                                                            nhập nội dung!
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <div class="btn btn-outline-danger" (click)="closeFormForwarded()"> Hủy
+                                            </div>
+                                            <button class="btn btn-outline-info ml-2"> Chuyển tiếp</button>
                                         </div>
                                     </form>
                                 </div>
@@ -132,15 +198,18 @@
                                 <h6 class="font-weight-bold">Cơ quan chức năng trả lời:</h6>
                                 <div>{{item.contents}}</div>
                                 <div class="mb-2 mt-4 d-flex align-items-center justify-content-start">
-                                    <a href="{{item.files}}">
-                                        <div
-                                            class="attach-icon-reply d-flex align-items-center justify-content-center">
+                                    <div *ngIf="!item.files"
+                                         class="attach-icon-reply d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-paperclip"></i>
+                                    </div>
+                                    <a *ngIf="item.files" href="{{item.files}}">
+                                        <div class="attach-icon-reply d-flex align-items-center justify-content-center">
                                             <i class="bi bi-paperclip"></i>
                                         </div>
                                     </a>
                                     <div class="attach-file-reply">
                                         <div style="font-size: 12px">File đính kèm:</div>
-                                        <div>{{item.files.substr(32)}}</div>
+                                        <div>{{item.files ? item.files.substr(32) : 'Không có file đính kèm'}}</div>
                                     </div>
                                 </div>
                             </div>

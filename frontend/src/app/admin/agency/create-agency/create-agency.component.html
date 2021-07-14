@@ -5,11 +5,16 @@
         <div class="content pt-3">
             <div class="container pb-5 px-5">
                 <div class="row justify-content-center">
-                    <div class="col-sm-12">
-                        <h2 class="text-center text-info mt-3 mb-5 my-title">Thêm tài khoản mới</h2>
+                    <div class="col-sm-1 back">
+                        <button class="btn btn-outline-info fa-rotate-180" (click)="comeBack()">
+                            <i class="bi bi-arrow-return-right"></i>
+                        </button>
                     </div>
+                    <div class="col-sm-10">
+                        <h2 class="text-center text-info mt-3 mb-5 my-title">Thêm cơ quan mới</h2>
+                    </div>
+                    <div class="col-sm-1"></div>
                 </div>
-
                 <form #myForm="ngForm" [formGroup]="formData" (ngSubmit)="onSubmit()">
                     <div class="form-group">
                         <div class="row">
@@ -27,7 +32,8 @@
                                         Vui lòng nhập tên cơ quan!
                                     </div>
                                     <div *ngIf="formValid.agencyName.errors.pattern">
-                                        <i class="bi bi-exclamation-circle"></i> Tên cơ quan cho phép tối đa 50 ký tự chỉ
+                                        <i class="bi bi-exclamation-circle"></i> Tên cơ quan cho phép tối đa 50 ký tự
+                                        chỉ
                                         bao gồm chữ cái!
                                     </div>
                                 </div>
@@ -40,8 +46,18 @@
                                 <label>Trạng thái</label>
                             </div>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" formControlName="status"
-                                       placeholder="Nhập trạng thái">
+                                <select formControlName="status" class="form-control w-100"
+                                        [ngClass]="{ 'is-invalid': (submitted || formValid.status.touched ) && formValid.status.errors }">
+                                    <option value="null" disabled hidden>-- Chọn trạng thái --</option>
+                                    <option style="padding: 20px" *ngFor="let item of listStatus"
+                                            [value]="item.value">{{item.name}}</option>
+                                </select>
+                                <div *ngIf="(submitted || formValid.status.touched ) && formValid.status.errors"
+                                     class="invalid-feedback login-error pb-0">
+                                    <div *ngIf="formValid.status.errors.required">
+                                        <i class="bi bi-exclamation-circle"></i> Vui lòng nhập trạng thái!
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -62,7 +78,8 @@
                     <i class="bi bi-check-lg"></i> {{success}}
                 </div>
                 <div [ngClass]="{ 'show': error }" class="thongbaoloi">
-                    <i class="bi bi-exclamation-circle"></i> {{error}} <span class="pointer" (click)="closeError()"><i class="bi bi-x"></i></span>
+                    <i class="bi bi-exclamation-circle"></i> {{error}} <span class="pointer" (click)="closeError()"><i
+                    class="bi bi-x"></i></span>
                 </div>
             </div>
         </div>

@@ -21,6 +21,9 @@ public class FeedbackEntity extends BaseEntity {
     @Column(name = "files")
     private String files;
 
+    @Column(name = "status")
+    private String status;
+
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "accountid")
@@ -35,11 +38,12 @@ public class FeedbackEntity extends BaseEntity {
         super();
     }
 
-    public FeedbackEntity(Long id, String title, String contents, String files, AccountEntity account, RecommendationsEntity recommendations) {
+    public FeedbackEntity(Long id, String title, String contents, String files, String status, AccountEntity account, RecommendationsEntity recommendations) {
         this.id = id;
         this.title = title;
         this.contents = contents;
         this.files = files;
+        this.status = status;
         this.account = account;
         this.recommendations = recommendations;
     }
@@ -74,6 +78,14 @@ public class FeedbackEntity extends BaseEntity {
 
     public void setFiles(String files) {
         this.files = files;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public AccountEntity getAccount() {

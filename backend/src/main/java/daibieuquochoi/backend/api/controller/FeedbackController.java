@@ -1,11 +1,13 @@
 package daibieuquochoi.backend.api.controller;
 
 import daibieuquochoi.backend.entity.AccountEntity;
+import daibieuquochoi.backend.entity.AgencyEntity;
 import daibieuquochoi.backend.entity.FeedbackEntity;
 import daibieuquochoi.backend.entity.RecommendationsEntity;
 import daibieuquochoi.backend.exception.BadRequestException;
 import daibieuquochoi.backend.response.ResponseMessage;
 import daibieuquochoi.backend.service.Impl.AccountServiceImpl;
+import daibieuquochoi.backend.service.Impl.AgencyServiceImpl;
 import daibieuquochoi.backend.service.Impl.FeedbackServiceImpl;
 import daibieuquochoi.backend.service.Impl.RecommendationsServiceImpl;
 import daibieuquochoi.backend.service.UploadFileService;
@@ -45,6 +47,9 @@ public class FeedbackController {
     @Autowired
     private FeedbackServiceImpl feedbackService;
 
+    @Autowired
+    private AgencyServiceImpl agencyService;
+
     @PostMapping(path = "/feedback")
     public ResponseEntity<?> create(
             @RequestParam(value = "files")
@@ -55,11 +60,14 @@ public class FeedbackController {
             @RequestParam(value = "contents")
             @NotBlank(message = "{Contents.NotBlank}")
                     String contents,
+            @RequestParam(value = "status")
+            @NotBlank(message = "{Status.NotBlank}")
+                    String status,
             @RequestParam(value = "accountName")
             @NotBlank(message = "{Account.NotBlank}")
                     String accountName,
             @RequestParam(value = "recommendationsid")
-            @NotBlank(message = "{Agency.NotBlank}")
+            @NotBlank()
                     String recommendationsid
     ) {
         try {
@@ -68,39 +76,70 @@ public class FeedbackController {
             AccountEntity accountEntity = accountService.findByAccountName(accountName).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tài khoản: " + accountName));
             RecommendationsEntity recommendationsEntity = recommendationsService.findByID(Long.parseLong(recommendationsid)).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy phản ánh có id = " + recommendationsid));
 
-//            Set FILE
-            String[] allowedMimeTypes = new String[]{
-                    "application/msword",
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                    "application/vnd.ms-excel",
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    "application/pdf", "image/png", "image/jpeg"
-            };
-            if (!ArrayUtils.contains(allowedMimeTypes, files.getContentType())) {
-                throw new BadRequestException("Tệp không hợp lệ, các tệp hợp lệ bao gồm: word, excel, pdf, ảnh[.jpg, .png]");
-            }
-            String fileName = files.getOriginalFilename();
-            ArrayList<String> listFileName = new ArrayList<>();
-            uploadFileService.loadAll().forEach(file -> {
-                listFileName.add(file.getFileName().toString());
-            });
-            if (listFileName.contains(fileName)) {
-                throw new BadRequestException("Tên tệp đã tồn tại! Vui lòng đổi tên tệp và thử lại.");
-            } else {
-                uploadFileService.save(files, fileName);
-            }
-            String urlFile = BASE_URL + "api/files/" + fileName;
-
-            feedbackEntity.setFiles(urlFile);
+            feedbackEntity.setFiles(null);
             feedbackEntity.setTitle(title);
             feedbackEntity.setContents(contents);
+            feedbackEntity.setStatus(status);
             feedbackEntity.setAccount(accountEntity);
             feedbackEntity.setRecommendations(recommendationsEntity);
 
+            if (recommendationsEntity.getFeedback().size() == 0 && status.equals("Phản hồi")) {
+                recommendationsService.updateStatus(Long.parseLong(recommendationsid), "Đã phản hồi");
+            }
             feedbackService.create(feedbackEntity);
 
             return ResponseEntity.ok(new ResponseMessage(new Date(), HttpStatus.OK.value(), "Phản hồi thành công!"));
-//            return new ResponseEntity<>(feedbackEntity, HttpStatus.OK);
+
+        } catch (ConstraintViolationException ex) {
+            return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), ex.getMessage()));
+        }
+    }
+
+    @PostMapping(path = "/forwarded")
+    public ResponseEntity<?> forwarded(
+            @RequestParam(value = "agency")
+            @NotBlank(message = "{Agency.NotBlank}")
+                    String agency,
+            @RequestParam(value = "title")
+            @NotBlank(message = "{Title.NotBlank}")
+                    String title,
+            @RequestParam(value = "contents")
+            @NotBlank(message = "{Contents.NotBlank}")
+                    String contents,
+            @RequestParam(value = "status")
+            @NotBlank(message = "{Status.NotBlank}")
+                    String status,
+            @RequestParam(value = "accountName")
+            @NotBlank(message = "{Account.NotBlank}")
+                    String accountName,
+            @RequestParam(value = "recommendationsid")
+            @NotBlank()
+                    String recommendationsid
+    ) {
+        try {
+            FeedbackEntity feedbackEntity = new FeedbackEntity();
+
+            AccountEntity accountEntity = accountService.findByAccountName(accountName).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tài khoản: " + accountName));
+            RecommendationsEntity recommendationsEntity = recommendationsService.findByID(Long.parseLong(recommendationsid)).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy phản ánh có id = " + recommendationsid));
+
+
+            feedbackEntity.setFiles(null);
+
+            feedbackEntity.setTitle(title);
+            feedbackEntity.setContents(contents);
+            feedbackEntity.setStatus(status);
+            feedbackEntity.setAccount(accountEntity);
+            feedbackEntity.setRecommendations(recommendationsEntity);
+
+            AgencyEntity agencyEntity = agencyService.findByAgencyName(agency).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy cơ quan: " + agency));
+            RecommendationsEntity oldRecommendationsEntity = recommendationsService.findByID(Long.parseLong(recommendationsid)).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy id = " + recommendationsid));
+            oldRecommendationsEntity.setAgency(agencyEntity);
+            recommendationsService.update(oldRecommendationsEntity);
+
+            feedbackService.create(feedbackEntity);
+
+            return ResponseEntity.ok(new ResponseMessage(new Date(), HttpStatus.OK.value(), "Chuyển tiếp thành công!"));
+
         } catch (ConstraintViolationException ex) {
             return ResponseEntity.badRequest().body(new ResponseMessage(new Date(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), ex.getMessage()));
         }
@@ -110,7 +149,7 @@ public class FeedbackController {
     public ResponseEntity<?> getFeedbackByRecommendations(@RequestParam(value = "id") long id) {
         RecommendationsEntity recommendationsEntity = recommendationsService.findByID(id).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy id này"));
 
-        List<FeedbackEntity> listFeedback = feedbackService.getByRecommendations(recommendationsEntity);
+        List<FeedbackEntity> listFeedback = feedbackService.getByRecommendations(recommendationsEntity, "Phản hồi");
         return new ResponseEntity<>(listFeedback, HttpStatus.OK);
     }
 

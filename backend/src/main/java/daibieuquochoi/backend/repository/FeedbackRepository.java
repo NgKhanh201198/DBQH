@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface FeedbackRepository extends JpaRepository<FeedbackEntity, Long>{
-    List<FeedbackEntity> findByRecommendationsOrderByIdDesc(RecommendationsEntity recommendationsEntity);
+    List<FeedbackEntity> findByRecommendationsAndStatusOrderByIdDesc(RecommendationsEntity recommendationsEntity, String status);
 }

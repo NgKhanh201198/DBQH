@@ -3,6 +3,8 @@ import {AuthenticationService} from '../../core/services/authentication.service'
 import {Router} from '@angular/router';
 import {Account} from '../../core/models/Account';
 import {LoggerService} from '../../core/services/logger.service';
+import {Options} from '../../core/models/Options';
+import {ERole} from '../../core/models/erole.enum';
 
 @Component({
     selector: 'app-nav-admin',

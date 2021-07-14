@@ -10,6 +10,6 @@ public interface IFeedbackService {
     void create(FeedbackEntity feedbackEntity);
 
     //Read
-    List<FeedbackEntity> getByRecommendations(RecommendationsEntity recommendationsEntity);
+    List<FeedbackEntity> getByRecommendations(RecommendationsEntity recommendationsEntity, String status);
 
 }

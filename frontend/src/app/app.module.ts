@@ -25,6 +25,7 @@ import {CreateAgencyComponent} from './admin/agency/create-agency/create-agency.
 import {CreateAccountComponent} from './admin/account/create-account/create-account.component';
 import {ListAgencyComponent} from './admin/agency/list-agency/list-agency.component';
 import {UpdateAgencyComponent} from './admin/agency/update-agency/update-agency.component';
+import { UpdateRecommentdationsComponent } from './pages/update-recommentdations/update-recommentdations.component';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import {UpdateAgencyComponent} from './admin/agency/update-agency/update-agency.
         RecommendationsComponent,
         CreateAgencyComponent,
         ListAgencyComponent,
-        UpdateAgencyComponent
+        UpdateAgencyComponent,
+        UpdateRecommentdationsComponent
     ],
     imports: [
         BrowserModule,

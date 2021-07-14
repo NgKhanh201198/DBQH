@@ -7,6 +7,7 @@ import {DetailComponent} from './pages/detail/detail.component';
 import {RecommendationsComponent} from './pages/recommendations/recommendations.component';
 import {LoginComponent} from './pages/login/login.component';
 import {AdminComponent} from './admin/admin.component';
+import {UpdateRecommentdationsComponent} from './pages/update-recommentdations/update-recommentdations.component';
 
 const routes: Routes = [
     {
@@ -28,6 +29,12 @@ const routes: Routes = [
     {
         path: 'tiep-nhan-phan-anh',
         component: RecommendationsComponent,
+        canActivate: [AuthenticationGuard],
+        data: {roles: [ERole.ADMIN, ERole.USER]}
+    },
+    {
+        path: 'chinh-sua-phan-anh',
+        component: UpdateRecommentdationsComponent,
         canActivate: [AuthenticationGuard],
         data: {roles: [ERole.ADMIN, ERole.USER]}
     },

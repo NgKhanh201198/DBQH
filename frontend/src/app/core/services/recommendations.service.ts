@@ -42,6 +42,24 @@ export class RecommendationsService {
         return this.http.post(`${URL}`, formData).pipe(catchError(this.handleError));
     }
 
+    update(id: any, data: any): Observable<any> {
+        const formData: FormData = new FormData();
+        formData.append('files', data.files);
+        formData.append('object', data.object);
+        formData.append('fullname', data.fullname);
+        formData.append('address', data.address);
+        formData.append('phonenumber', data.phonenumber);
+        formData.append('email', data.email);
+        formData.append('title', data.title);
+        formData.append('commenttype', data.commenttype);
+        formData.append('fields', data.fields);
+        formData.append('contents', data.contents);
+        formData.append('status', data.status);
+        formData.append('reportingdeadline', data.reportingdeadline);
+        formData.append('agency', data.agency);
+        return this.http.put(`${URL}/${id}`, formData).pipe(catchError(this.handleError));
+    }
+
     getRecommendationsAll(): Observable<any> {
         return this.http.get(`${URL}`).pipe(catchError(this.handleError));
     }
@@ -51,15 +69,12 @@ export class RecommendationsService {
         return this.http.get(`${URL}/search`, {params}).pipe(catchError(this.handleError));
     }
 
-    // search(keyword: any): Observable<any> {
-    //     return this.http.get(`${URL}?keyword=${keyword}`).pipe(catchError(this.handleError));
-    // }
-
     getRecommendationsByID(id: any): Observable<any> {
         return this.http.get(`${URL}/${id}`).pipe(catchError(this.handleError));
     }
 
-    getFiles(url: any): Observable<any> {
-        return this.http.get(url).pipe(catchError(this.handleError));
+    getRecommendationsWarning(agency: any): Observable<any> {
+        const params = new HttpParams().append('agency', agency);
+        return this.http.get(`${URL}/warning`,{params}).pipe(catchError(this.handleError));
     }
 }

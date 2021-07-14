@@ -1,18 +1,10 @@
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #17a2b8;">
-    <div class="navbar-brand pr-5 pl-5"></div>
+<nav class="navbar navbar-expand-lg navbar-dark nav-home">
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse pl-lg-5" id="navbarText">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link menu" [routerLink]="['','trang-chu']" [routerLinkActive]="['active-nav']">Trang
-                    chủ</a>
-            </li>
-        </ul>
-    </div>
-    <div class="nav ml-auto mr-5 position-relative" *ngIf="currentAccount">
+    <div class="nav">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle username text-white" href="" id="navbarDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -30,5 +22,19 @@
                 </a>
             </div>
         </li>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link menu p-0" [routerLink]="['','trang-chu']" [routerLinkActive]="['active-nav']">Trang
+                    chủ</a>
+            </li>
+        </ul>
+    </div>
+    <div class="warning">
+        <div *ngFor="let item of listWarning; index as i" [ngClass]="{'move': i==index,'d-none': i!=index }"
+             class="title-warning move">Phản ánh "<i>{{item.title}}</i>" - Đã trễ lịch phải hồi {{item.day}} ngày - Đề
+            nghị cơ quan "{{item.agency}}" xử lý!
+        </div>
     </div>
 </nav>

@@ -9,6 +9,7 @@ const httpOptions = {
 };
 
 const URL = `${environment.baseUrlServer}` + 'api/feedback';
+const URL1 = `${environment.baseUrlServer}` + 'api/forwarded';
 
 @Injectable({
     providedIn: 'root'
@@ -29,9 +30,21 @@ export class FeedbackService {
         formData.append('files', data.files);
         formData.append('title', data.title);
         formData.append('contents', data.contents);
+        formData.append('status', data.status);
         formData.append('accountName', data.accountName);
         formData.append('recommendationsid', data.recommendationsid);
         return this.http.post(`${URL}`, formData).pipe(catchError(this.handleError));
+    }
+
+    createForwarded(data: any): Observable<any> {
+        const formData: FormData = new FormData();
+        formData.append('agency', data.agency);
+        formData.append('title', data.title);
+        formData.append('contents', data.contents);
+        formData.append('status', data.status);
+        formData.append('accountName', data.accountName);
+        formData.append('recommendationsid', data.recommendationsid);
+        return this.http.post(`${URL1}`, formData).pipe(catchError(this.handleError));
     }
 
     getByRecommendations(id: any): Observable<any> {

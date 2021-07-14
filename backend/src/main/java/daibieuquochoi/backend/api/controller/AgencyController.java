@@ -89,7 +89,9 @@ public class AgencyController {
                 ResponseMessage message = new ResponseMessage(new Date(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.name(), "Không tìm thấy id = " + id);
                 return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
             } else {
-                agencyService.deleteById(id);
+                AgencyEntity oldAgencyEntity = agencyService.getById(id);
+                oldAgencyEntity.setStatus("Không hoạt động");
+                agencyService.updateById(oldAgencyEntity);
                 return ResponseEntity.ok(new ResponseMessage(new Date(), HttpStatus.OK.value(), "Xóa thành công!"));
             }
         } catch (Exception exception) {
