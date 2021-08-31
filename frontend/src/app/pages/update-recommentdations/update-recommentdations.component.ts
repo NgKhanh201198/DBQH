@@ -49,6 +49,7 @@ export class UpdateRecommentdationsComponent implements OnInit {
     newFields = '';
     commenttype = '';
     newCommenttype = '';
+    newStatus = '';
     status = '';
     success = '';
     error = '';
@@ -147,6 +148,14 @@ export class UpdateRecommentdationsComponent implements OnInit {
 
             if (result.files) {
                 this.imgURL = result.files.substring(32);
+            }
+
+            let statusName = [];
+            this.listStatus.forEach((item => statusName.push(item.value)));
+            if (statusName.indexOf(result.status) === -1) {
+                this.showStatus = true;
+                this.newStatus = result.status;
+                result.status = 'Khác';
             }
 
             this.formData = this.formBuilder.group({

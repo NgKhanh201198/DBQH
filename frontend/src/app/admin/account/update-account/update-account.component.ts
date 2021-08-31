@@ -126,21 +126,23 @@ export class UpdateAccountComponent implements OnInit {
 
         this.logger.log(this.formUpdate.value);
 
-        this.accountService.updateAccountByID(this.id, this.formUpdate.value).subscribe({
-            next: (response) => {
-                this.error = '';
-                this.submitted = false;
-                this.success = response.message;
-            },
-            error: (err) => {
-                if (err) {
-                    this.error = err.message;
+        if (this.formUpdate.status === 'VALID') {
+            this.accountService.updateAccountByID(this.id, this.formUpdate.value).subscribe({
+                next: (response) => {
+                    this.error = '';
+                    this.submitted = false;
+                    this.success = response.message;
+                },
+                error: (err) => {
+                    if (err) {
+                        this.error = err.message;
+                    }
                 }
-            }
-        }),
-            setTimeout(() => {
-                this.success = '';
-            }, 2500);
+            });
+        }
+        setTimeout(() => {
+            this.success = '';
+        }, 2500);
     }
 
 }

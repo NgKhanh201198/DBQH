@@ -95,8 +95,6 @@ export class RecommendationsComponent implements OnInit {
         this.logger.log(this.listDistrict);
         this.logger.log(this.listAgency);
 
-
-
         this.formData = this.formBuilder.group({
             object: ['', [Validators.required]],
             fullname: ['', [Validators.required]],

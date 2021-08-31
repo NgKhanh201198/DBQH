@@ -271,8 +271,8 @@
                             <option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</option>
                         </select>
                         <div class="w-100 mt-3" *ngIf="showStatus">
-                            <input type="text" class="form-control" (change)="changeStatus($event)"
-                                   placeholder="Nhập trạng thái khác">
+                            <input type="text" class="form-control" value="{{newStatus}}"
+                                   (change)="changeStatus($event)" placeholder="Nhập trạng thái khác">
                         </div>
                         <div *ngIf="submitted && formValid.status.errors" class="invalid-feedback login-error pb-0">
                             <div *ngIf="formValid.status.errors.required">
